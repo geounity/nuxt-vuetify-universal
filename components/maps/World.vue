@@ -7,12 +7,11 @@
 if (process.browser) {
   window.jQuery = require('jquery')
   require('jvectormap')
-  require('~/static/map-world.js')
+  require('~/static/map-world')
 }
 export default {
   name: 'Worldmap',
   head: {
-    title: 'OWQPWI',
     link: [
       {
         rel: 'stylesheet',
@@ -27,10 +26,14 @@ export default {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs':
           return 'height:200px'
+        case 'sm':
+          return 'height:250px'
         case 'md':
-          return 'height:400px'
+          return 'height:300px'
+        case 'lg':
+          return 'height:350px'
         default:
-          return 'height:500px'
+          return 'height:400px'
       }
     }
   },

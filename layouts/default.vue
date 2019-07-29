@@ -17,9 +17,7 @@ export default {
   components: { guAppbar, guBottomNav, guFooter },
   data() {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
+      logged: true,
       items: [
         {
           icon: 'mdi-apps',
@@ -32,9 +30,6 @@ export default {
           to: '/inspire'
         }
       ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
       title: 'Vuetify.js'
     }
   }

@@ -34,6 +34,7 @@ export const state = () => ({
 
 export const getters = {
   geocommunity: (state) => state.geocommunity,
+  logged: (state) => state.logged,
   statics: (state) => state.geocommunity[state.geocommunity.length - 1].statics
 }
 
