@@ -1,6 +1,10 @@
 const colors = require('vuetify/es5/util/colors').default
+const webpack = require('webpack')
 
 module.exports = {
+  server: {
+    host: '0.0.0.0'
+  },
   mode: 'universal',
   /*
    ** Headers of the page
@@ -76,9 +80,13 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    /*
-     ** You can extend webpack config here
-     */
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery'
+      })
+    ],
     extend(config, ctx) {}
   }
 }
