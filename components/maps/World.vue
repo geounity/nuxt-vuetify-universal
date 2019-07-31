@@ -47,9 +47,11 @@ export default {
         window.jQuery('#world-map').vectorMap({
           map: 'world_mill',
           backgroundColor: '#246d7b',
+          regionsSelectableOne: true,
           onRegionClick(e, code) {
-            self.$emit('selectedCountry', code)
-            self.$store.dispatch('FETCH_COUNTRY', code)
+            self.$store.dispatch('FETCH_COUNTRY', code).then(() => {
+              self.$emit('selectedCountry')
+            })
           }
         })
       })

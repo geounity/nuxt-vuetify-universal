@@ -4,6 +4,7 @@ import apiGeounity from '~/plugins/api'
 export const state = () => ({
   loading: false,
   error: false,
+  showModalLogin: false,
   authId: null,
   user: {
     username: 'user',
@@ -33,9 +34,19 @@ export const state = () => ({
 })
 
 export const getters = {
-  geocommunity: (state) => state.geocommunity,
-  logged: (state) => state.logged,
-  statics: (state) => state.geocommunity[state.geocommunity.length - 1].statics
+  items: (state) => {
+    return state.geocommunity.map((item) => {
+      const name = item.country || item.state || item.name
+      return {
+        text: name
+      }
+    })
+  },
+  country: (state) => state.geocommunity[2],
+  state: (state) => state.geocommunity[3],
+  statics: (state) => state.geocommunity[state.geocommunity.length - 1].statics,
+  debates: (state) => state.geocommunity[state.geocommunity.length - 1].debates,
+  aims: (state) => state.geocommunity[state.geocommunity.length - 1].aims
 }
 
 export const mutations = {
@@ -69,7 +80,9 @@ export const mutations = {
   SET_USER: (state, payload) => {
     state.user = payload
   },
-
+  TOGGLE_MODAL_SIGNIN: (state) => {
+    state.showModalLogin = !state.showModalLogin
+  },
   UPDATE_USER: (state, payload) => {
     state.user = {
       ...state.user,
@@ -159,7 +172,7 @@ export const actions = {
     commit('SET_AUTHID', userId)
   },
   FETCH_COUNTRY: ({ commit }, code) => {
-    apiGeounity.get(`/country/${code}`).then((country) => {
+    return apiGeounity.get(`/country/${code}`).then((country) => {
       const { data } = country
       commit('UPDATE_GEOCOMMUNITY', {
         name: data.in_continent,
