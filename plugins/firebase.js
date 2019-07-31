@@ -2,15 +2,16 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
+import env from './config'
 if (!firebase.apps.length) {
   const config = {
-    apiKey: 'AIzaSyA1frqipSZPFk61yfDQ9-uGSYXDuwxqdAg',
-    authDomain: 'geounity.firebaseapp.com',
-    databaseURL: 'https://geounity.firebaseio.com',
-    projectId: 'geounity',
-    storageBucket: 'geounity.appspot.com',
-    messagingSenderId: '675273107835',
-    appId: '1:675273107835:web:782de361cc4c04f0'
+    apiKey: env.firebase.apiKey,
+    authDomain: env.firebase.authDomain,
+    databaseURL: env.firebase.databaseURL,
+    projectId: env.firebase.projectId,
+    storageBucket: env.firebase.storageBucket,
+    messagingSenderId: env.firebase.messagingSenderId,
+    appId: env.firebase.appId
   }
   firebase.initializeApp(config)
 }

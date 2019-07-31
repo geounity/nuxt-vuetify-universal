@@ -7,7 +7,7 @@
       v-flex(xs12 sm9 md7 lg4 class="text-center")
         figure
           v-img(
-            :src="downloadURL?downloadURL:'/sinfoto.png'",
+            :src="photoURL?photoURL:'/sinfoto.png'",
             style="margin:1rem auto"
             width="200px"
           )
@@ -25,7 +25,7 @@
           :multiple="false",
           @change="detectFiles($event)"
         )
-        v-progress-circular(
+        v-progress-circular(signup
           v-if="loading",
           :size="100",
           :width="15",
@@ -33,7 +33,7 @@
           :value="progressUpload",
           color="primary"
         ) {{progressUpload}} %
-        div(v-if="downloadURL")
+        div(v-if="photoURL")
           v-btn(
             class="ma-0",
             dark
@@ -63,7 +63,7 @@
         v-card(style="max-width:450px;margin:0 auto" class="elevation-5")
           v-card-title
             v-avatar
-              img(:src="downloadURL?downloadURL:'/sinfoto.png'" class="mr-2" style="border-radius:50%:float:left")
+              img(:src="photoURL?photoURL:'/sinfoto.png'" class="mr-2" style="border-radius:50%:float:left")
             div
               h4.overline #[strong {{username}}] ( {{formInfo.name}} {{formInfo.lastName}} )
               h5.body-2 {{formInfo.birthDate?yearsOld:'xx'}} años
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -90,18 +91,8 @@ export default {
     }
   },
   computed: {
-    downloadURL() {
-      return this.$store.state.user.photoURL
-    },
-    loading() {
-      return this.$store.state.loading
-    },
-    progressUpload() {
-      return this.$store.state.progressUpload
-    },
-    username() {
-      return this.$store.state.user.username
-    },
+    ...mapState(['loading', 'progressUpload']),
+    ...mapGetters('modules/user', ['username', 'photoURL']),
     yearsOld() {
       const today = new Date()
       const birthDate = new Date(this.formInfo.birthDate)
