@@ -11,10 +11,8 @@
           )
             v-icon(size="24px") {{ icon }}
         v-card-text(class="white--text pt-0")
-          p(style="color:#64DD17;max-width:600px") Geounity app es una sistema de moderación y estudio para comunidades o empresas. Creamos acuerdos e identificamos conflictos entre los diferentes puntos de vista. También organizamos objetivos en común para una comunidad en específico.
-
+          p(style="color:#64DD17;max-width:600px") Geounity app es una sistema de moderación y estudio para comunidades geopolíticas o empresas. Identificamos acuerdos y conflictos entre los diferentes puntos de vista. También organizamos objetivos en común para una comunidad en específico.
         v-divider
-
         v-card-text(class="white--text")
           span &copy;2019 #[strong Geounity]
 </template>

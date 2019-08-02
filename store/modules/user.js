@@ -21,7 +21,7 @@ export const getters = {
     else return null
   },
 
-  photoURL(state) {
+  avatar(state) {
     return state.user.photoURL
   },
 

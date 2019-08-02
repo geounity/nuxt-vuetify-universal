@@ -32,16 +32,22 @@ body {
   background: #cecece;
 }
 .modal {
-  color: #fff;
-  position: absolute;
-  top: 55px;
-  width: 250px;
   background: rgba(0, 0, 0, 0.8);
-  padding: 15px;
+  color: #fff;
+  margin: 0 auto;
   min-width: 320px;
+  position: absolute;
+  left: 50%;
+  top: 55px;
+  transform: translate(-50%, 0);
 }
 .modal > .message {
   margin: 0;
   margin-bottom: 10px;
+}
+@media screen and (min-width: 600px) {
+  .modal {
+    padding: 2rem 6rem;
+  }
 }
 </style>

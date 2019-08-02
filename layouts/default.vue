@@ -20,6 +20,7 @@ import guModalLogin from '~/components/modals/ModalSignIn.vue'
 import guFormSignin from '~/components/forms/Signin.vue'
 
 export default {
+  middleware: 'authenticated',
   components: {
     guAppbar,
     guBottomNav,

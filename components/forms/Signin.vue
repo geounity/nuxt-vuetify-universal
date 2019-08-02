@@ -1,6 +1,6 @@
 <template lang="pug">
   v-layout(justify-center wrap)
-    v-flex(xs11 md5 lg4 xl3)
+    v-flex(xs11 md10 lg6 xl5)
       v-form(v-model="value" ref="form" lazy-validation class="my-1")
         h2(heading class="text-xs-center") Iniciar sesión
         v-text-field(
@@ -23,7 +23,7 @@
           required
         )
         v-btn(:disabled="!value" color="success" block @click="loginHandlerSubmit" @keyup.enter="loginHandlerSubmit") Iniciar sesión
-    v-flex(xs12 md5 lg4 xl3)
+    v-flex(xs12 md10 lg6 xl5)
       no-ssr
         firebase-ui
 </template>

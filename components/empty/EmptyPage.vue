@@ -9,7 +9,9 @@
             v-btn( nuxt to="/signup" color="success" class="mt-3") Registrarte
           div(v-else class="text-center")
             p Se el primero en crear una encuesta para tu comunidad
-            v-btn( nuxt to="/poll/new" color="primary" class="mt-3") Crear encuesta
+            v-btn( v-if="page==='encuesta'" nuxt to="/poll/new" color="primary" class="mt-3") Crear encuesta
+            v-btn( v-if="page==='debate'" nuxt to="/debate/new" color="primary" class="mt-3") Crear debate
+            v-btn( v-if="page==='idea'" nuxt to="/aim/new" color="primary" class="mt-3") Crear propuesta
 </template>
 
 <script>

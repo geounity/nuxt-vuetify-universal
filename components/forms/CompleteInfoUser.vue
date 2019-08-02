@@ -92,7 +92,7 @@ export default {
   },
   computed: {
     ...mapState(['loading', 'progressUpload']),
-    ...mapGetters('modules/user', ['username', 'photoURL']),
+    ...mapGetters('modules/user', ['username', 'avatar']),
     yearsOld() {
       const today = new Date()
       const birthDate = new Date(this.formInfo.birthDate)

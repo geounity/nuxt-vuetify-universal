@@ -1,7 +1,7 @@
 <template lang="pug">
   v-app-bar( color="rgb(62, 6, 148)" dense dark app )
     v-toolbar-title
-      nuxt-link( to="/" exact class="font-weight-black") {{title}}
+      nuxt-link( to="/" exact class="font-weight-black mr-2") {{title}}
     v-toolbar-items.hidden-sm-and-down
       v-btn( nuxt :to="item.to" exact :key="i" v-for="(item, i) in items" text ) {{item.title}}
     v-spacer
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     signOut() {
-      this.$store.dispatch('SIGN_OUT')
+      this.$store.modules.user.dispatch('SIGN_OUT')
     },
     toggleModalHandle() {
       this.$store.commit('TOGGLE_MODAL_SIGNIN')

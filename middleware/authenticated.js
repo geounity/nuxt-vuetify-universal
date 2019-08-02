@@ -1,5 +1,6 @@
 export default function({ store, redirect }) {
-  if (!store.getters['modules/user/isAuthenticated']) {
-    return redirect('/auth/signin')
-  }
+  // store.dispatch('FETCH_AUTH_USER')
+  // if (!store.getters['modules/user/isAuthenticated']) {
+  //   return redirect('/')
+  // }
 }
