@@ -2,9 +2,9 @@ const colors = require('vuetify/es5/util/colors').default
 const webpack = require('webpack')
 
 module.exports = {
-  // server: {
-  //   host: '0.0.0.0'
-  // },
+  server: {
+    host: '0.0.0.0'
+  },
   mode: 'universal',
   /*
    ** Headers of the page
