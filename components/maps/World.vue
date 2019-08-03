@@ -1,13 +1,13 @@
 <template lang="pug">
   .map-container(class="text-align-center")
-    #world-map(:style="height")
+    #vmap(:style="height")
 </template>
 
 <script>
 if (process.browser) {
   window.jQuery = require('jquery')
-  require('jvectormap')
-  require('~/static/map-world')
+  require('~/static/jquery.vmap')
+  require('~/static/jquery.vmap.world')
 }
 export default {
   name: 'Worldmap',
@@ -16,7 +16,7 @@ export default {
       {
         rel: 'stylesheet',
         type: 'text/css',
-        href: '/jquery-jvectormap-2.0.3.css',
+        href: '/jqvmap.css',
         media: 'screen'
       }
     ]
@@ -44,9 +44,13 @@ export default {
     drawMap() {
       const self = this
       window.jQuery(document).ready(function() {
-        window.jQuery('#world-map').vectorMap({
-          map: 'world_mill',
+        window.jQuery('#vmap').vectorMap({
+          map: 'world_en',
           backgroundColor: '#246d7b',
+          borderColor: '#818181',
+          borderOpacity: 0.25,
+          borderWidth: 1,
+          selectedColor: '#c9dfaf',
           regionsSelectableOne: true,
           onRegionClick(e, code) {
             self.$store.dispatch('FETCH_COUNTRY', code).then(() => {

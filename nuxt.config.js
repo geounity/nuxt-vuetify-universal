@@ -1,16 +1,12 @@
-const colors = require('vuetify/es5/util/colors').default
 const webpack = require('webpack')
 
 module.exports = {
-  server: {
-    host: '0.0.0.0'
-  },
   mode: 'universal',
   /*
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
+    // titleTemplate: '%s - ' + process.env.npm_package_name,
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -38,7 +34,7 @@ module.exports = {
         body: true
       },bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#ff0' },
   /*
    ** Global CSS
    */
@@ -77,13 +73,14 @@ module.exports = {
     theme: {
       themes: {
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
+          primary: '#008940',
+          accent: '#0279D7',
+          secondary: '#9F9F9F',
+          info: '#0279D7',
+          warning: '#B71C1C',
+          error: '#B71C1C',
+          success: '#4CAf50',
+          hola: '#00ff00'
         }
       }
     }
