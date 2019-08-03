@@ -52,9 +52,7 @@
                 v-btn(color="primary" @click.stop="selectedType('number', i - 1)") Number
                 v-btn(color="primary" @click.stop="selectedType('radio', i - 1)") Elección única
                 v-btn(color="primary" @click.stop="selectedType('checkbox', i - 1)") Elección múltiple
-                v-btn(color="primary" @click.stop="selectedType('open', i - 1)") Abierta
-                a( nuxt to="/docs")
-                  h6.caption.text-center Ver ejemplos sobre tipos de preguntas
+                v-btn(color="primary" style="justify-items:center" @click.stop="selectedType('open', i - 1)") Abierta
               .group-options(v-if="selectType[i - 1]==='boolean'")
                 p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las preguntas dicotómicas solo tienen una opción entre dos. Generalmente suelen ser SI/NO MUJER/HOMBRE POSITIVO/NEGATIVO etc. Usted las puede modificar.
                 h3.body-2.mb-3.mt-5 Opciones para respuestas:
@@ -104,8 +102,8 @@
                   outlined
                   width="100%"
                 )
-                v-btn(color="secondary" @click.prevent="addQuestion") +
-                v-btn(color="secondary" @click.prevent="removeQuestion") -
+                v-btn(color="secondary" @click.prevent="addOptionRadio" class="mr-2") +
+                v-btn(color="secondary" @click.prevent="removeOptionRadio" class="ml-2") -
               .group-options(v-if="selectType[i - 1]==='checkbox'")
                 p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Estas preguntas tienen 2 o mas opciones y podrá seleccionar las que quiera incluyendo ninguna o todas.
                 h3.body-2.mb-3.mt-5 Opciones para respuestas:
@@ -113,16 +111,15 @@
                   v-for="(c, j) in checkboxs"
                   :key="j"
                   v-model="formPoll.questions[i - 1].options[j]"
-                  label='Opción'
                   type="text"
                   outlined
                   width="100%"
                 )
-                v-btn(color="secondary" @click.prevent="addOptionCheckbox") +
-                v-btn(color="secondary" @click.prevent="removeOptionCheckbox") -
+                v-btn(color="secondary" @click.prevent="addOptionCheckbox" class="mr-2") +
+                v-btn(color="secondary" @click.prevent="removeOptionCheckbox" class="ml-2") -
               div(v-if="selectType==='open'")
                 p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las respuestas abiertas no tienen opciones. Podran responder libremente.
-              v-btn(color="success" class="mt-5" style="color:white" block @click.prevent="addQuestion") Nueva pregunta
+              v-btn(color="#246d7b" class="mt-5" style="color:white" block @click.prevent="addQuestion") Nueva pregunta
       v-flex(xs12 md5 offset-md1)
         h4.heading Previsualización <br />
         v-card
@@ -146,17 +143,21 @@
                     :max="formPoll.questions[i - 1].options[1]"
                   )
                 .group-options(v-if="selectType[i - 1]==='radio'" class="mb-4")
-                  v-input(
-                    v-for="(r, j) in radios"
-                    :key="j"
-                    :label="formPoll.questions[i - 1].options[j]"
-                    type="radio"
-                    outlined
-                    class="mt-1"
-                    width="100%"
-                  )
+                  v-radio-group(v-model="radioGroup")
+                    v-radio(
+                      v-for="(r, j) in radios"
+                      :key="j"
+                      :label="formPoll.questions[i - 1].options[j]"
+                      class="mt-1"
+                    )
                 .group-options(v-if="selectType[i - 1]==='checkbox'" class="mb-4")
-        v-btn(color="#246d7b" class="mt-4" dark) Ver demo
+                  v-checkbox(
+                    v-for="(c, j) in checkboxs"
+                    :key="i"
+                    :label="formPoll.questions[i - 1].options[j]"
+                  )
+        v-btn(color="" class="mt-4" block) Ver demo
+        v-btn(color="success" class="mt-4" block dark style="height:3rem") Publicar
 </template>
 
 <script>
@@ -166,6 +167,7 @@ export default {
   data() {
     return {
       question: 1,
+      radioGroup: 1,
       selectType: [],
       checkboxs: 1, // Cantidad de opciones para preguntas radios
       radios: 3, // Cantidad de opciones para preguntas radios
@@ -264,7 +266,6 @@ export default {
       }
       if (e === 'checkbox') {
         this.formPoll.questions[this.question - 1].options[0] = 'Opción 1'
-        this.formPoll.questions[this.question - 1].options[1] = 'Opción 2'
       }
     },
     updateLabel() {
