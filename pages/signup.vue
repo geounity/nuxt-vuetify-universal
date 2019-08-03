@@ -32,12 +32,10 @@
             //-   h2.title Otro mapa u en su defecto un input select
             v-btn(color="success" @click="step = 2" block class="mt-3") Continuar
           v-stepper-content(step="2")
-            v-layout( justify-center wrap)
-              v-flex( xs12 sm6 md6 class="my-2")
-                form-new-user(@nextStep="step = 3; signupWithEmail = true")
-              v-flex.text-center.mb-3
-                span o
-              v-flex( xs12 sm6 md6 style="border-top:2px dotted grey")
+            v-layout( justify-space-around wrap)
+              v-flex( xs12 sm6 md6 class="my-2" style="border:1px solid red" )
+                form-new-user(@nextStep="step = 3; signupWithEmail = true" style="max-width:400px")
+              v-flex( xs12 sm6 md6 )
                 firebase-ui(@nextStep="step = 3; signupWithEmail = false")
           v-stepper-content(step="3" class="pa-0")
             v-alert(type="success" :value="signupWithEmail" dismissible) Hemos enviado un correo de confirmación a tu casilla de email.

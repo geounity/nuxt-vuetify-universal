@@ -4,7 +4,7 @@ export const state = () => ({
   loading: false,
   error: false,
   showModalLogin: false,
-  authId: true,
+  authId: 333,
   geocommunity: [
     {
       name: 'Global',

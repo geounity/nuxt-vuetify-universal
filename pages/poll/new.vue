@@ -1,8 +1,8 @@
 <template lang="pug">
   v-container
     v-layout(wrap)
-      v-flex(xs12)
-        h6.caption Para la comunidad de:
+      v-flex(xs12 class="mt-2")
+        h6.caption.mr-3(style="float:left") Para la comunidad de:
         v-breadcrumbs(:items="items" divider="<")
     v-layout(justify-center wrap)
       v-flex(xs12)
@@ -13,14 +13,14 @@
           placeholder="Titulo"
           name="title-poll"
           type="text"
-          solo
+          outlined
         )
       v-flex(xs12)
-        v-alert(:value="error" color="warning" dismissible dark) {{ error }}
+        v-alert(:value="error?true:false" color="warning" dismissible dark) {{ error }}
       v-flex(xs12 md6 class="mb-5")
         h4.heading Preguntas <br />
         v-stepper(v-model="question")
-          v-stepper-header(style="justify-content:flex-start")
+          v-stepper-header(style="justify-content:flex-start;flex-wrap:nowrap;overflow:scroll")
             v-stepper-step(
               v-for="i in formPoll.questions.length"
               :key="i"
@@ -30,7 +30,7 @@
               style="flex-basis: 40px; padding: 24px 10px;"
             )
             v-stepper-step(
-              color="#246d7b"
+              color="success"
               step="+"
               style="flex-basis: 40px; padding: 24px 10px;"
               @click.prevent="addQuestion"
@@ -48,63 +48,71 @@
               )
               h3.body-2.ma-0 Tipo de pregunta:
               .group-buttons-type
-                v-btn(color="primary" @click.prevent="selectedType") Boolean
-                v-btn(color="primary" @click.prevent="selectedType") Number
-                v-btn(color="primary" @click.prevent="selectedType") Elección única
-                v-btn(color="primary" @click.prevent="selectedType") Elección múltiple
-                v-btn(color="primary" @click.prevent="selectedType") Abierta
+                v-btn(color="primary" @click.stop="selectedType('boolean', i - 1)") Dicotómica
+                v-btn(color="primary" @click.stop="selectedType('number', i - 1)") Number
+                v-btn(color="primary" @click.stop="selectedType('radio', i - 1)") Elección única
+                v-btn(color="primary" @click.stop="selectedType('checkbox', i - 1)") Elección múltiple
+                v-btn(color="primary" @click.stop="selectedType('open', i - 1)") Abierta
                 a( nuxt to="/docs")
                   h6.caption.text-center Ver ejemplos sobre tipos de preguntas
-              h4(v-if="selectType").body-2.my-2 Opciones para respuestas:
-              .group-options(v-if="selectType==='Boolean'")
-                v-text-field(
-                  v-model="formPoll.questions[i - 1].options[0]"
-                  type="text"
-                  style="max-width:100px"
-                  outlined
-                )
-                v-text-field(
-                  v-model="formPoll.questions[i - 1].options[1]"
-                  type="text"
-                  style="max-width:100px"
-                  outlined
-                )
-              .group-options(v-if="selectType==='Number'")
-                v-text-field(
-                  v-model="formPoll.questions[i - 1].options[0]"
-                  label="Min"
-                  class="mt-1"
-                  type="number"
-                  style="max-width:100px"
-                  @change="updateLabel"
-                  outlined
-                )
-                v-text-field(
-                  v-model="formPoll.questions[i - 1].options[1]"
-                  label="Max"
-                  class="mt-1"
-                  type="number"
-                  style="max-width:100px"
-                  @change="updateLabel"
-                  outlined
-                )
-              .group-options(v-if="selectType==='Radio'")
+              .group-options(v-if="selectType[i - 1]==='boolean'")
+                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las preguntas dicotómicas solo tienen una opción entre dos. Generalmente suelen ser SI/NO MUJER/HOMBRE POSITIVO/NEGATIVO etc. Usted las puede modificar.
+                h3.body-2.mb-3.mt-5 Opciones para respuestas:
+                div(style="display:flex;justify-content:space-around")
+                  v-text-field(
+                    v-model="formPoll.questions[i - 1].options[0]"
+                    type="text"
+                    style="max-width:150px"
+                    outlined                
+                  )
+                  v-text-field(
+                    v-model="formPoll.questions[i - 1].options[1]"
+                    type="text"
+                    style="max-width:150px"
+                    outlined
+                  )
+              .group-options(v-if="selectType[i - 1]==='number'")
+                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las preguntas númericas solo aceptan números como respuestas. Usted puede definir el rango que deberá tener la respuesta.
+                h3.body-2.mb-3.mt-5 Opciones para respuestas:
+                div(style="display:flex;justify-content:space-around")
+                  v-text-field(
+                    v-model="formPoll.questions[i - 1].options[0]"
+                    label="Min"
+                    class="mt-1"
+                    type="number"
+                    style="max-width:100px"
+                    @change="updateLabel"
+                    outlined
+                  )
+                  v-text-field(
+                    v-model="formPoll.questions[i - 1].options[1]"
+                    label="Max"
+                    class="mt-1"
+                    type="number"
+                    style="max-width:100px"
+                    @change="updateLabel"
+                    outlined
+                  )
+              .group-options(v-if="selectType[i - 1]==='radio'")
+                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Estas preguntas tienen 3 o mas opciones y solo podrá seleccionar una sola. Si quiere insertar dos opciones use las de tipo dicotómica.
+                h3.body-2.mb-3.mt-5 Opciones para respuestas:
                 v-text-field(
                   v-for="(r, j) in radios"
                   :key="j"
-                  v-model="formPoll.questions[i - 1].options[j - 1]"
-                  label=`Opción`
+                  v-model="formPoll.questions[i - 1].options[j]"
                   type="text"
                   outlined
                   width="100%"
                 )
                 v-btn(color="secondary" @click.prevent="addQuestion") +
                 v-btn(color="secondary" @click.prevent="removeQuestion") -
-              .group-options(v-if="selectType==='Checkbox'")
+              .group-options(v-if="selectType[i - 1]==='checkbox'")
+                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Estas preguntas tienen 2 o mas opciones y podrá seleccionar las que quiera incluyendo ninguna o todas.
+                h3.body-2.mb-3.mt-5 Opciones para respuestas:
                 v-text-field(
                   v-for="(c, j) in checkboxs"
                   :key="j"
-                  v-model="formPoll.questions[i - 1].options[j - 1]"
+                  v-model="formPoll.questions[i - 1].options[j]"
                   label='Opción'
                   type="text"
                   outlined
@@ -112,7 +120,9 @@
                 )
                 v-btn(color="secondary" @click.prevent="addOptionCheckbox") +
                 v-btn(color="secondary" @click.prevent="removeOptionCheckbox") -
-              v-btn(color="#246d7b" class="mt-5" style="color:white" block @click.prevent="addQuestion") Nueva pregunta
+              div(v-if="selectType==='open'")
+                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las respuestas abiertas no tienen opciones. Podran responder libremente.
+              v-btn(color="success" class="mt-5" style="color:white" block @click.prevent="addQuestion") Nueva pregunta
       v-flex(xs12 md5 offset-md1)
         h4.heading Previsualización <br />
         v-card
@@ -123,10 +133,10 @@
             ol
               li.body-2(v-for="i in formPoll.questions.length" :key="i") {{ formPoll.questions[i - 1].content }}
                 h6.caption.mb-2 Type: {{formPoll.questions[i - 1].type}}
-                .group-options(v-if="selectType==='Boolean'" class="mt-2 mb-4")
-                  v-btn(color="success") {{formPoll.questions[i - 1].options[0]}}
-                  v-btn(color="error") {{formPoll.questions[i - 1].options[1]}}
-                .group-options(v-if="selectType==='Number'" class="mb-4")
+                .group-options(v-if="selectType[i - 1]==='boolean'" class="mt-2 mb-4")
+                  v-btn(color="success" class="mr-2") {{formPoll.questions[i - 1].options[0]}}
+                  v-btn(color="error" class="ml-2") {{formPoll.questions[i - 1].options[1]}}
+                .group-options(v-if="selectType[i - 1]==='number'" class="mb-4")
                   v-text-field(
                     class="mt-1"
                     :label="label2"
@@ -135,7 +145,18 @@
                     :min="formPoll.questions[i - 1].options[0]"
                     :max="formPoll.questions[i - 1].options[1]"
                   )
-        v-btn(color="success" class="mt-4") Ver demo
+                .group-options(v-if="selectType[i - 1]==='radio'" class="mb-4")
+                  v-input(
+                    v-for="(r, j) in radios"
+                    :key="j"
+                    :label="formPoll.questions[i - 1].options[j]"
+                    type="radio"
+                    outlined
+                    class="mt-1"
+                    width="100%"
+                  )
+                .group-options(v-if="selectType[i - 1]==='checkbox'" class="mb-4")
+        v-btn(color="#246d7b" class="mt-4" dark) Ver demo
 </template>
 
 <script>
@@ -145,7 +166,7 @@ export default {
   data() {
     return {
       question: 1,
-      selectType: '',
+      selectType: [],
       checkboxs: 1, // Cantidad de opciones para preguntas radios
       radios: 3, // Cantidad de opciones para preguntas radios
       label: '',
@@ -163,8 +184,12 @@ export default {
         ]
       },
       titleRules: [
-        (v) => v.length <= 256 || 'Password must be less than 256 characters',
-        (v) => v.length >= 6 || 'Password must be more than 6 characters'
+        (v) =>
+          v.length <= 256 ||
+          'Título de la encuesta debe tener menos de 100 caracteres',
+        (v) =>
+          v.length >= 5 ||
+          'Título de la encuesta debe tener mas de 5 caracteres'
       ]
     }
   },
@@ -173,7 +198,7 @@ export default {
     ...mapGetters(['items'])
   },
   mounted() {
-    this.label = `Pregunta para ${this.items[this.items.length - 1].text}`
+    this.label = `Pregunta para ${this.items[this.items.length - 1].text}...`
   },
   methods: {
     addQuestion() {
@@ -215,25 +240,35 @@ export default {
         this.checkboxs--
       }
     },
-    selectedType(e) {
-      this.formPoll.questions[this.question - 1].type = e.target.textContent
-      this.selectType = e.target.textContent
-      if (e.target.textContent === 'Boolean') {
+    selectedType(e, i) {
+      this.formPoll.questions[this.question - 1].type = e
+      this.selectType[i] = e
+      if (e === 'boolean') {
         this.formPoll.questions[this.question - 1].options[0] = 'SI'
         this.formPoll.questions[this.question - 1].options[1] = 'NO'
       }
-      const self = this
-      if (e.target.textContent === 'Number') {
+      if (e === 'number') {
+        const self = this
         this.formPoll.questions[this.question - 1].options[0] = 1
         this.formPoll.questions[this.question - 1].options[1] = 100
         setTimeout(() => {
           self.label2 = `Ingrese un número entre ${
             self.formPoll.questions[self.question - 1].options[0]
           } y ${self.formPoll.questions[self.question - 1].options[1]}`
-        }, 500)
+        }, 100)
+      }
+      if (e === 'radio') {
+        this.formPoll.questions[this.question - 1].options[0] = 'Opción 1'
+        this.formPoll.questions[this.question - 1].options[1] = 'Opción 2'
+        this.formPoll.questions[this.question - 1].options[2] = 'Opción 3'
+      }
+      if (e === 'checkbox') {
+        this.formPoll.questions[this.question - 1].options[0] = 'Opción 1'
+        this.formPoll.questions[this.question - 1].options[1] = 'Opción 2'
       }
     },
     updateLabel() {
+      console.log('Estamos dentro del update')
       const self = this
       setTimeout(() => {
         self.label2 = `Ingrese un número entre ${
@@ -257,8 +292,9 @@ ul {
   grid-gap: 0.5rem;
 }
 .group-options {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  text-align: center;
+  // display: flex;
+  // flex-wrap: wrap;
+  // justify-content: space-around;
 }
 </style>
