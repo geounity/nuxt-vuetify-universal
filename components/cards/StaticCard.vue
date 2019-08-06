@@ -11,10 +11,10 @@
 <script>
 // import Chart from '~/components/Chart.vue'
 export default {
-  name: 'StaticCard'
-  // props: {
-  //   static: Object,
-  // }
+  name: 'StaticCard',
+  props: {
+    static: { type: Object, default: () => [] }
+  }
   // components: { Chart }
 }
 </script>

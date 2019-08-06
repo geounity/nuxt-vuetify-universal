@@ -1,6 +1,6 @@
 <template lang="pug">
   v-form(v-model="value" ref="form" lazy-validation class="mb-3")
-    v-alert(:value="error" color="error" class="my-3" dismissible) {{ error }}
+    v-alert(:value="error?true:false" color="error" style="color:#fff" class="my-3" dismissible) {{ error }}
     v-text-field(
       v-model="formRegister.email"  
       :rules="emailRules"
@@ -8,7 +8,6 @@
       placeholder="e-mail"
       type="email"
       name="email"
-      solo
       required
     )
     v-text-field(
@@ -18,7 +17,6 @@
       label="Nombre de usuario"
       placeholder="username"
       name="username"
-      solo
       required
     )
     v-text-field(
@@ -28,7 +26,6 @@
       placeholder="insert password"
       name="password"
       type="password"
-      solo
       required
       @keyup.enter="validate"
     )
@@ -38,12 +35,15 @@
       label="Acepto los Terminos y Condiciones"
       required
     )
+    loading(v-if="loading")
     v-btn(:disabled="!value" color="success" block @click.prevent="validate") Continue
 </template>
 
 <script>
-// import * as firebaseui from 'firebaseui'
+import { mapState } from 'vuex'
+import Loading from '~/components/Loading'
 export default {
+  components: { Loading },
   data() {
     return {
       value: true,
@@ -71,16 +71,21 @@ export default {
     }
   },
   computed: {
-    error() {
-      return this.$store.state.error
-    }
+    ...mapState(['error', 'loading'])
   },
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('CREATE_USER', this.formRegister).then(() => {
-          this.$emit('nextStep')
-        })
+        this.$store.commit('LOADING_ON')
+        this.$store
+          .dispatch('CREATE_USER', this.formRegister)
+          .then(() => {
+            this.$emit('nextStep')
+          })
+          .catch((e) => {
+            this.$store.commit('SET_ERROR', e)
+          })
+        this.$store.commit('LOADING_OFF')
       } else {
         console.log('Formulario INVALIDO!')
       }

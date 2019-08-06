@@ -4,7 +4,8 @@
       v-alert(:value="true" color="info" class="mb-2" dismissible)
         span.white--text Se uno de los pimeros usuarios en registrarse
     v-flex(xs12)
-      v-breadcrumbs(:items="items" divider="<")
+      h6.caption Mi comunidad:
+      v-breadcrumbs(:items="items" divider="<").pa-1
     v-flex(lg10)
       v-stepper(v-model="step" alt-labels)
         v-stepper-header
@@ -14,6 +15,7 @@
           v-divider
           v-stepper-step(:complete="step > 3" step="3") Información complementaria
         v-stepper-items(class="mt-2")
+
           v-stepper-content(step="1" class="pa-0 text-xs-center")
             h2.title.text-center Seleccione una comunidad
             world-map(v-if="geocommunity.length >= 1" @selectedCountry="handleSelectedCountry")
@@ -31,15 +33,18 @@
             //- template(v-else)
             //-   h2.title Otro mapa u en su defecto un input select
             v-btn(color="success" @click="step = 2" block class="mt-3") Continuar
+
           v-stepper-content(step="2")
             v-layout( justify-space-around wrap)
-              v-flex( xs12 sm6 md6 class="my-2" style="border:1px solid red" )
+              v-flex( xs12 sm6 md6 class="my-2" )
                 form-new-user(@nextStep="step = 3; signupWithEmail = true" style="max-width:400px")
               v-flex( xs12 sm6 md6 )
                 firebase-ui(@nextStep="step = 3; signupWithEmail = false")
+
           v-stepper-content(step="3" class="pa-0")
             v-alert(type="success" :value="signupWithEmail" dismissible) Hemos enviado un correo de confirmación a tu casilla de email.
             complete-info-user
+            
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
@@ -82,9 +87,7 @@ export default {
   methods: {
     handleSelectedCountry() {
       const country = this.geocommunity[2]
-      console.log('QUIEN ES CODE?')
-      console.log(country.division_name)
-      this.label = `Cantidad de ${country.division_name}`
+      this.label = `Seleccion de ${country.division_name}`
       this.$store.dispatch('FETCH_STATES', country.code).then((states) => {
         this.states = states.data.map((state) => {
           return state.state

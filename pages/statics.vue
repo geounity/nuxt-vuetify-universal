@@ -1,11 +1,10 @@
 <template lang="pug">
   main
     v-breadcrumbs(:items="items" divider="<")
-    v-container(v-if="statics")
+    v-container(v-if="statics && statics.length !== 0")
       v-layout
-        v-flex
-          v-card( v-for="(s, i) in statics" :key="i")
-            p {{ s }}
+        v-flex(v-for="(s, i) in statics" :key="i")
+          gu-static-card( :static="s" )
     empty-page(v-else page="encuesta")
 </template>
 

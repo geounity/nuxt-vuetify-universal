@@ -1,15 +1,15 @@
 <template lang="pug">
-  v-app-bar( color="rgb(62, 6, 148)" dense dark app )
+  v-app-bar( dense app )
     v-toolbar-title
       nuxt-link( to="/" exact class="font-weight-black mr-2") {{title}}
-    v-toolbar-items.hidden-sm-and-down
-      v-btn( nuxt :to="item.to" exact :key="i" v-for="(item, i) in items" text ) {{item.title}}
     v-spacer
-    v-toolbar-items
-      v-btn( v-if="!authId" @click.prevent="toggleModalHandle" small text class="font-weight-black") Login
-      v-btn( v-if="!authId" nuxt to="/signup" color="success" small class="font-weight-black") Registrate
-      v-btn( v-if="authId" nuxt to="/user/profile" small) {{username}}
-      v-btn( v-if="authId" @click="signOut" small text ) Cerrar sesión 
+    v-toolbar-items.hidden-sm-and-down.mr-5
+      v-btn( nuxt :to="item.to" exact :key="i" v-for="(item, i) in items" x-large text color="rgb(62, 6, 148)" ) {{item.title}}
+    v-toolbar-items(style="display:flex;align-items:center")
+      v-btn( v-if="!authId" @click.prevent="toggleModalHandle" x-small text class="font-weight-black" max-height="37" color="rgb(62, 6, 148)") Login
+      v-btn( v-if="!authId" nuxt to="/signup" x-small class="font-weight-black my-btn-color" max-height="37" class="px-4") Registrate
+      v-btn( v-if="authId" nuxt to="/user/profile" x-small ) {{username}}
+      v-btn( v-if="authId" @click="signOut" x-small text ) Cerrar sesión 
 </template>
 
 <script>
@@ -48,6 +48,10 @@ export default {
 <style scoped>
 a {
   text-decoration: none;
-  color: white;
+  color: rgb(62, 6, 148);
+}
+.my-btn-color {
+  background-image: linear-gradient(270deg, #34d058 0, #28a745 90%);
+  color: #fff;
 }
 </style>

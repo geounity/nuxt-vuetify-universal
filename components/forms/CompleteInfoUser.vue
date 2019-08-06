@@ -7,13 +7,14 @@
       v-flex(xs12 sm9 md7 lg4 class="text-center")
         figure
           v-img(
-            :src="photoURL?photoURL:'/sinfoto.png'",
+            :src="avatar?avatar:'/sinfoto.png'",
             style="margin:1rem auto"
             width="200px"
           )
         v-btn(
           v-if="!loading",
           @click.once="selectFile"
+          class="mb-2"
         ) Subir una foto
           v-icon(right aria-hidden="true") mdi-camera
         input(
@@ -33,7 +34,7 @@
           :value="progressUpload",
           color="primary"
         ) {{progressUpload}} %
-        div(v-if="photoURL")
+        div(v-if="avatar")
           v-btn(
             class="ma-0",
             dark
@@ -49,21 +50,21 @@
           solo
         )
         v-text-field(
-          v-model="formInfo.lastName"
+          v-model="formInfo.lastname"
           label="Apellido"
           style="max-width:450px; margin:0 auto"
           solo
         )
       v-flex(xs12 lg4 class="mt-2 text-center")
         h3.body-2.text-center Fecha de nacimiento
-        v-date-picker(v-model="formInfo.birthDate" color="green lighten-1")
+        v-date-picker(v-model="formInfo.datebirth" color="green lighten-1")
       //- v-divider(vertical)
       v-flex(xs12 lg6 class="mt-5")
         h3.subheading.text-center.my-2 Previsualización de tu caja de opiniones
         v-card(style="max-width:450px;margin:0 auto" class="elevation-5")
           v-card-title
             v-avatar
-              img(:src="photoURL?photoURL:'/sinfoto.png'" class="mr-2" style="border-radius:50%:float:left")
+              img(:src="avatar?avatar:'/sinfoto.png'" class="mr-2" style="border-radius:50%:float:left")
             div
               h4.overline #[strong {{username}}] ( {{formInfo.name}} {{formInfo.lastName}} )
               h5.body-2 {{formInfo.birthDate?yearsOld:'xx'}} años
@@ -73,6 +74,7 @@
           v-card-actions
             v-icon fab fa-facebook
       v-flex(xs11 class="my-4")
+        v-alert(:value="error?true:false" color="error" style="color:#fff" class="my-3" dismissible) {{ error }}
         v-btn( @click="save" color="primary" block) Guardar
             
 </template>
@@ -84,15 +86,15 @@ export default {
     return {
       formInfo: {
         fileName: '',
-        name: 'Nombre',
-        lastName: 'Apellido',
-        birthDate: ''
+        name: '',
+        lastname: '',
+        datebirth: ''
       }
     }
   },
   computed: {
-    ...mapState(['loading', 'progressUpload']),
-    ...mapGetters('modules/user', ['username', 'avatar']),
+    ...mapState(['error', 'loading', 'progressUpload']),
+    ...mapGetters(['username', 'avatar']),
     yearsOld() {
       const today = new Date()
       const birthDate = new Date(this.formInfo.birthDate)
@@ -106,7 +108,7 @@ export default {
   },
   methods: {
     save() {
-      console.log('Ponele que la imagen se haya enviado')
+      this.$store.dispatch('PUT_INFO_USER', this.formInfo)
     },
     selectFile() {
       this.$refs.uploadInput.click()

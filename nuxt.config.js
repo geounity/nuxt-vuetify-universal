@@ -1,6 +1,9 @@
-const webpack = require('webpack')
+// const webpack = require('webpack')
 
 module.exports = {
+  server: {
+    port: 3001
+  },
   mode: 'universal',
   /*
    ** Headers of the page
@@ -69,32 +72,32 @@ module.exports = {
    ** https://github.com/nuxt-community/vuetify-module
    */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
-    theme: {
-      themes: {
-        dark: {
-          primary: '#008940',
-          accent: '#0279D7',
-          secondary: '#9F9F9F',
-          info: '#0279D7',
-          warning: '#B71C1C',
-          error: '#B71C1C',
-          success: '#4CAf50',
-          hola: '#00ff00'
-        }
-      }
-    }
+    customVariables: ['~/assets/variables.scss']
+    // theme: {
+    //   themes: {
+    //     dark: {
+    //       primary: '#008940',
+    //       accent: '#0279D7',
+    //       secondary: '#9F9F9F',
+    //       info: '#0279D7',
+    //       warning: '#B71C1C',
+    //       error: '#B71C1C',
+    //       success: '#4CAf50',
+    //       hola: '#00ff00'
+    //     }
+    //   }
+    // }
   },
   /*
    ** Build configuration
    */
   build: {
     plugins: [
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery'
-      })
+      // new webpack.ProvidePlugin({
+      //   $: 'jquery',
+      //   jQuery: 'jquery',
+      //   'window.jQuery': 'jquery'
+      // })
     ],
     extend(config, ctx) {}
   }

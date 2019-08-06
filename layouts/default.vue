@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import guAppbar from '~/components/layout/Appbar.vue'
 import guBottomNav from '~/components/layout/BottomNav.vue'
 import guFooter from '~/components/layout/Footer.vue'
@@ -31,26 +33,12 @@ export default {
   data() {
     return {
       logged: true,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
       show: false,
       title: 'Geounity App'
     }
   },
   computed: {
-    showModalLogin() {
-      return this.$store.state.showModalLogin
-    }
+    ...mapState(['authId', 'showModalLogin'])
   }
 }
 </script>
