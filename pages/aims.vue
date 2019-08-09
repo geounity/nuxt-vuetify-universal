@@ -1,6 +1,7 @@
 <template lang="pug">
   main
-    v-breadcrumbs(:items="items" divider="<")
+    v-container(fluid)
+      gu-breadcrumbs
     v-container(v-if="aims && aims.length !== 0")
       v-layout
         v-flex(v-for="(a, i) in aims" :key="i")
@@ -10,16 +11,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import EmptyPage from '~/components/empty/EmptyPage.vue'
+import GuBreadcrumbs from '~/components/layout/Breadcrumbs.vue'
 import GuCardAim from '~/components/cards/AimCard.vue'
+import EmptyPage from '~/components/empty/EmptyPage.vue'
 export default {
   name: 'PageAims',
-  components: { GuCardAim, EmptyPage },
+  components: { GuCardAim, EmptyPage, GuBreadcrumbs },
   date() {
     return {}
   },
   computed: {
-    ...mapGetters(['aims', 'items'])
+    ...mapGetters(['aims'])
   }
 }
 </script>

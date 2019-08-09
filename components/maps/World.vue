@@ -32,6 +32,8 @@ export default {
           return 'height:300px'
         case 'lg':
           return 'height:350px'
+        case 'xl':
+          return 'height:550px'
         default:
           return 'height:400px'
       }

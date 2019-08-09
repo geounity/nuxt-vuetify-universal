@@ -5,6 +5,9 @@ module.exports = {
     port: 3001
   },
   mode: 'universal',
+  router: {
+    middleware: 'router-auth'
+  },
   /*
    ** Headers of the page
    */

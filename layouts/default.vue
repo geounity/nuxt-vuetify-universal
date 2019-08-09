@@ -22,7 +22,7 @@ import guModalLogin from '~/components/modals/ModalSignIn.vue'
 import guFormSignin from '~/components/forms/Signin.vue'
 
 export default {
-  middleware: 'authenticated',
+  // middleware: 'authenticated',
   components: {
     guAppbar,
     guBottomNav,
@@ -32,13 +32,11 @@ export default {
   },
   data() {
     return {
-      logged: true,
-      show: false,
       title: 'Geounity App'
     }
   },
   computed: {
-    ...mapState(['authId', 'showModalLogin'])
+    ...mapState(['showModalLogin', 'showModalSelectCommunity'])
   }
 }
 </script>

@@ -36,16 +36,18 @@ body {
   color: #fff;
   margin: 0 auto;
   min-width: 320px;
+  height: 100%;
+  width: 100%;
   position: absolute;
-  left: 50%;
-  top: 55px;
-  transform: translate(-50%, 0);
+  display: flex;
+  justify-content: center;
+  top: 50px;
 }
 .modal > .message {
   margin: 0;
   margin-bottom: 10px;
 }
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 1600px) {
   .modal {
     padding: 2rem 6rem;
   }

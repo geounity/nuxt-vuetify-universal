@@ -1,17 +1,37 @@
 <template lang="pug">
-  section
-    h1 Comunidades
-    v-layout(xs12 wrap justify-center).text-xs-center
-      v-flex
-        v-card(nuxt to="/").pa-3.my-1.elevation-4
-          h2.title Geográficas
-          p Continentes, naciones, provincias, municipios, etc.
-      v-flex
-        v-card(nuxt to="/").pa-3.my-1.elevation-4
-          h2.title Empresariales
-          p Negocios, mercados, organizaciones, cooperativas, etc.
-      v-flex
-        v-card(nuxt to="/").pa-3.my-1.elevation-4
-          h2.title Ideológicas
-          p Religiones, partidos políticos, equipos de futbol, etc.
+  main
+    h1.display-2.text-center.my-5 Comunidad Global
+    h2.display-1.text-center.my-3 Naciones Unidas
+    ul.gu-flex
+      li(v-for="(flag, i) in flags" :key="i")
+        v-img(:src="flag" width="50")
 </template>
+
+<script>
+export default {
+  name: 'Communities',
+  data() {
+    return {
+      flags: []
+    }
+  },
+  beforeMount() {
+    this.$store.dispatch('FETCH_FLAGS').then((res) => {
+      this.flags = res
+    })
+  }
+}
+</script>
+
+<style scoped>
+ul {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 2rem;
+}
+ul li {
+  margin: 0.3rem;
+  list-style: none;
+}
+</style>

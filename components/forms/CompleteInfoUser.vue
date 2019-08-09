@@ -93,7 +93,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['error', 'loading', 'progressUpload']),
+    ...mapState(['error', 'loading', 'modules/user/progressUpload']),
     ...mapGetters(['username', 'avatar']),
     yearsOld() {
       const today = new Date()

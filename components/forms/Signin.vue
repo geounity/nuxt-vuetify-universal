@@ -1,8 +1,8 @@
 <template lang="pug">
-  v-layout(justify-center wrap)
-    v-flex(xs11 md10 lg6 xl5)
-      v-form(v-model="value" ref="form" lazy-validation class="my-1")
-        h2(heading class="text-xs-center") Iniciar sesión
+  v-layout(justify-center wrap class="mt-5")
+    v-flex(xs11 md8 lg5 xl3)
+      v-form(v-model="value" ref="form" lazy-validation class="my-1" style="max-width: 500px; margin: 0 auto")
+        h2(heading class="text-center mb-5") Iniciar sesión
         v-text-field(
           v-model="formLogin.email"  
           :rules="emailRules"
@@ -23,7 +23,7 @@
           required
         )
         v-btn(:disabled="!value" color="success" block @click="loginHandlerSubmit" @keyup.enter="loginHandlerSubmit") Iniciar sesión
-    v-flex(xs12 md10 lg6 xl5)
+    v-flex(xs12 md4 lg5 xl3)
       no-ssr
         firebase-ui
 </template>

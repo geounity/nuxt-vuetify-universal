@@ -1,13 +1,16 @@
-import { auth, db, storage } from '~/plugins/firebase'
+import Cookies from 'js-cookie'
+import { auth, storage, db } from '~/plugins/firebase'
 import apiGeounity from '~/plugins/api'
+
+import { getUserFromCookie } from '@/helpers'
 
 export const state = () => ({
   loading: false,
   error: false,
   showModalLogin: false,
-  authId: 5656,
-  uid: null,
+  authId: '',
   user: {
+    uid: '',
     username: '',
     email: null,
     emailVerified: null,
@@ -18,6 +21,7 @@ export const state = () => ({
     providerData: '',
     community: '' // Haciendo referencia a Global
   },
+  progressUpload: 0,
   geocommunity: [
     {
       name: 'Global',
@@ -28,12 +32,26 @@ export const state = () => ({
       debates: [],
       aims: []
     }
-  ],
+  ]
   // , otro tipo de comunidades como las empresas, organizaciones, ideologías
-  progressUpload: 0
 })
 
 export const getters = {
+  // users
+  avatar(state) {
+    if (state.user && state.user.photoURL) return state.user.photoURL
+  },
+  isAuthenticated(state) {
+    return !!state.user && !!state.user.uid
+  },
+  uid(state) {
+    if (state.user && state.user.uid) return state.user.uid
+    else return null
+  },
+  username(state) {
+    return state.user.username
+  },
+  // geocmmunities
   items: (state) => {
     return state.geocommunity.map((item) => {
       const name = item.country || item.state || item.name
@@ -42,29 +60,41 @@ export const getters = {
       }
     })
   },
+  continent: (state) =>
+    state.geocommunity.length > 1 ? state.geocommunity[1] : '',
   country: (state) => state.geocommunity[2],
   state: (state) => state.geocommunity[3],
   statics: (state) => state.geocommunity[state.geocommunity.length - 1].statics,
   debates: (state) => state.geocommunity[state.geocommunity.length - 1].debates,
-  aims: (state) => state.geocommunity[state.geocommunity.length - 1].aims,
-  uid(state) {
-    if (state.user && state.user.uid) return state.user.uid
-    else return null
-  },
-  avatar(state) {
-    return state.user.photoURL
-  },
-
-  username(state) {
-    return state.user.username
-  },
-
-  isAuthenticated(state) {
-    return !!state.user && !!state.user.uid
-  }
+  aims: (state) => state.geocommunity[state.geocommunity.length - 1].aims
 }
 
 export const mutations = {
+  // users
+  DELETE_IMAGE_USER: (state) => {
+    state.user.photoURL = ''
+  },
+  SAVE_AUTHID(state, uid) {
+    console.log('[STORE MUTATIONS] - saveUID:', uid)
+    state.authId = uid
+  },
+  SET_USER(state, user) {
+    console.log('[STORE MUTATIONS] - serUSER:', user)
+    state.user = user
+  },
+  UPDATE_PROGRESS_UPLOAD: (state, sp) => {
+    state.progressUpload = sp
+  },
+  UPDATE_USER: (state, payload) => {
+    state.user = {
+      ...state.user,
+      ...payload
+    }
+  },
+  UPDATE_USER_IMAGE: (state, photo) => {
+    state.user.photoURL = photo
+  },
+  // geocommnities
   DELETE_LAST_GEOCOMMUNITY: (state) => {
     state.geocommunity.pop()
   },
@@ -90,39 +120,27 @@ export const mutations = {
       state.geocommunity.pop()
     }
     state.geocommunity.push(payload)
-  },
-  UPDATE_PROGRESS_UPLOAD: (state, sp) => {
-    state.progressUpload = sp
-  },
-  DELETE_IMAGE_USER: (state) => {
-    state.user.photoURL = ''
-  },
-  SET_AUTHID: (state, uid) => {
-    state.uid = uid
-  },
-  SET_USER: (state, user) => {
-    state.user = user
-  },
-  UPDATE_USER: (state, payload) => {
-    state.user = {
-      ...state.user,
-      ...payload
-    }
-  },
-  UPDATE_USER_IMAGE: (state, photo) => {
-    state.user.photoURL = photo
   }
 }
 
 export const actions = {
-  CREATE_POLL: ({ state, commit }, poll) => {
-    const newPoll = poll
-    const pollId = `poll${Math.random()}`
-    newPoll.key = pollId
-    newPoll.userId = state.authId
-    commit('SET_POLL', { newPoll, pollId })
-    commit('APPEND_POLL_TO_USER', { pollId, userId: newPoll.userId })
+  async nuxtServerInit({ dispatch }, { req }) {
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        console.log('user', user)
+      }
+    })
+    const userCookie = getUserFromCookie(req)
+    if (userCookie) {
+      await dispatch('modules/user/SET_USER', {
+        name: userCookie.name,
+        email: userCookie.email,
+        avatar: userCookie.picture,
+        uid: userCookie.user_id
+      })
+    }
   },
+  // users
   CREATE_USER: ({ state, commit }, { email, username, password }) =>
     new Promise(async (resolve, reject) => {
       const exist = await apiGeounity.get(`/user/${username}`)
@@ -145,7 +163,7 @@ export const actions = {
               .add(newUser)
               .then((doc) => {
                 console.log('Document written with ID: ', doc.id)
-                commit('UPDATE_USER', { ...newUser, idDoc: doc.id })
+                commit('SET_USER', { ...newUser, idDoc: doc.id })
                 apiGeounity.post('/signup', newUser)
                 resolve(state.user)
               })
@@ -163,35 +181,31 @@ export const actions = {
     }),
   DELETE_IMAGE_USER: ({ state }, fileName) =>
     storage.ref('images/' + fileName).delete(),
+  FETCH_FLAGS: ({ commit }) => {
+    let countries = []
+    return apiGeounity
+      .get('/countries')
+      .then((res) => {
+        countries = res.data
+        const arrFlags = countries.map((country) => country.flag)
+        console.log('[ARR DE FLAGS]')
+        console.log(arrFlags)
+        return arrFlags
+      })
+      .catch((e) => {
+        commit('SET_ERROR', e)
+      })
+  },
+  FETCH_USER: ({ state, commit }, { id }) =>
+    new Promise((resolve) => {
+      resolve('Hola fetch user')
+    }),
   FETCH_AUTH_USER: ({ commit }) => {
     const userId = auth.currentUser.uid
     commit('SET_AUTHID', userId)
   },
-  FETCH_COUNTRY: ({ commit }, code) => {
-    return apiGeounity.get(`/country/${code}`).then((country) => {
-      const { data } = country
-      commit('UPDATE_GEOCOMMUNITY', {
-        name: data.in_continent,
-        level: 2,
-        divisionName: 'Countries'
-      }) // Add continent
-      commit('UPDATE_GEOCOMMUNITY', {
-        ...data,
-        name: data.country,
-        level: 3
-      }) // Add country
-    })
-  },
-  FETCH_STATES: ({ commit }, countryCode) => {
-    return apiGeounity.get(`/${countryCode}/states`)
-  },
-  GET_POPULATION_TOTAL: () => {
-    return apiGeounity.get('/population')
-  },
-  PUT_INFO_USER: (
-    { state, commit },
-    { fileName, name, lastname, datebirth }
-  ) => {
+  PUT_INFO_USER: ({ state, commit }, payload) => {
+    const { fileName, name, lastname, datebirth } = payload
     console.log(
       'fileName',
       fileName,
@@ -223,12 +237,12 @@ export const actions = {
     return auth.signInWithEmailAndPassword(email, password)
   },
   SIGN_OUT: ({ commit }) => {
+    console.log('[STORE ACTIONS] - SIGN_OUT')
     auth.signOut().then(() => {
-      commit('SET_AUTHID', null)
+      Cookies.remove('access_token')
+      commit('SET_USER', null)
+      commit('SAVE_AUTHID', null)
     })
-  },
-  TOGGLE_MODAL_STATE: ({ commit }, { name, value }) => {
-    commit('SET_MODAL_STATE', { name, value })
   },
   UPLOAD_IMAGE_USER: ({ state, commit }, file) => {
     const uploadTask = storage
@@ -252,5 +266,54 @@ export const actions = {
         })
       }
     )
+  },
+  // polls
+  CREATE_POLL: ({ state, commit }, poll) => {
+    const newPoll = poll
+    const pollId = `poll${Math.random()}`
+    newPoll.key = pollId
+    newPoll.userId = state.authId
+    commit('SET_POLL', { newPoll, pollId })
+    commit('APPEND_POLL_TO_USER', { pollId, userId: newPoll.userId })
+  },
+  FETCH_COUNTRY: ({ commit }, code) => {
+    return apiGeounity.get(`/country/${code}`).then((country) => {
+      const { data } = country
+      commit('UPDATE_GEOCOMMUNITY', {
+        name: data.in_continent,
+        level: 2,
+        divisionName: 'Countries'
+      }) // Add continent
+      commit('UPDATE_GEOCOMMUNITY', {
+        ...data,
+        name: data.country,
+        level: 3
+      }) // Add country
+    })
+  },
+  FETCH_STATES: ({ commit }, countryCode) => {
+    return apiGeounity.get(`/${countryCode}/states`)
+  },
+
+  GET_POPULATION_TOTAL: () => {
+    return apiGeounity.get('/population')
+  },
+  LOGIN: async ({ dispatch, state }, user) => {
+    console.log('[STORE ACTIONS] - login')
+    const token = await auth.currentUser.getIdToken(true)
+    const userInfo = {
+      name: user.displayName,
+      email: user.email,
+      avatar: user.photoURL,
+      uid: user.uid
+    }
+
+    Cookies.set('access_token', token) // saving token in cookie for server rendering
+    await dispatch('SET_USER', userInfo)
+    await dispatch('SAVE_UID', userInfo.uid)
+    console.log('[STORE ACTIONS] - in login, response:', status)
+  },
+  TOGGLE_MODAL_STATE: ({ commit }, { name, value }) => {
+    commit('SET_MODAL_STATE', { name, value })
   }
 }

@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-form(v-model="value" ref="form" lazy-validation class="mb-3")
+  v-form(v-model="value" ref="form" lazy-validation class="mb-3" style="margin:0 auto")
     v-alert(:value="error?true:false" color="error" style="color:#fff" class="my-3" dismissible) {{ error }}
     v-text-field(
       v-model="formRegister.email"  
@@ -78,7 +78,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.commit('LOADING_ON')
         this.$store
-          .dispatch('CREATE_USER', this.formRegister)
+          .dispatch('modules/user/CREATE_USER', this.formRegister)
           .then(() => {
             this.$emit('nextStep')
           })

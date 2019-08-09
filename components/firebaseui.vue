@@ -15,6 +15,7 @@ export default {
   mounted() {
     const self = this
     const uiConfig = {
+      signInSuccessUrl: '/',
       signInFlow: 'popup',
       signInOptions: [
         // Leave the lines as is for the providers you want to offer your users.
@@ -29,6 +30,7 @@ export default {
         signInSuccessWithAuthResult() {
           console.log('signInSuccessWithAuthResult')
           self.$emit('nextStep')
+          self.$router.push('/')
         },
         uiShown() {
           console.log('uiShown')
@@ -40,6 +42,9 @@ export default {
       const ui =
         firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth)
       ui.start('#firebaseui-auth-container', uiConfig)
+      if (ui.isPendingRedirect()) {
+        ui.start('#firebaseui-auth-container', uiConfig)
+      }
     }
   }
 }

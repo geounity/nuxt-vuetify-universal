@@ -1,9 +1,9 @@
 <template lang="pug">
   v-container
-    v-layout(wrap)
-      v-flex(xs12 class="mt-2")
-        h6.caption.mr-3(style="float:left") Para la comunidad de:
-        v-breadcrumbs(:items="items" divider="<")
+    v-layout(align-center wrap class="mt-1")    
+      v-subheader Para la comunidad de:
+      v-breadcrumbs(:items="items" divider="<" class="pa-0 mr-3")
+      v-btn(@click.prevent="toggleModalSelectCommunity" text color="primary").caption Cambiar
     v-layout(justify-center wrap)
       v-flex(xs12)
         h4.heading.mt-2 Título de la encuesta <br />
@@ -70,7 +70,7 @@
                     outlined
                   )
               .group-options(v-if="selectType[i - 1]==='number'")
-                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las preguntas númericas solo aceptan números como respuestas. Usted puede definir el rango que deberá tener la respuesta.
+                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las preguntas númericas solo aceptan números enteros como respuestas. Usted puede definir el rango que deberá tener la respuesta.
                 h3.body-2.mb-3.mt-5 Opciones para respuestas:
                 div(style="display:flex;justify-content:space-around")
                   v-text-field(
@@ -92,7 +92,7 @@
                     outlined
                   )
               .group-options(v-if="selectType[i - 1]==='radio'")
-                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Estas preguntas tienen 3 o mas opciones y solo podrá seleccionar una sola. Si quiere insertar dos opciones use las de tipo dicotómica.
+                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Estas preguntas tienen 3 o mas opciones y solo podrá seleccionar una sola. Si quiere usar dos opciones use las de tipo dicotómica.
                 h3.body-2.mb-3.mt-5 Opciones para respuestas:
                 v-text-field(
                   v-for="(r, j) in radios"
@@ -117,8 +117,9 @@
                 )
                 v-btn(color="secondary" @click.prevent="addOptionCheckbox" class="mr-2") +
                 v-btn(color="secondary" @click.prevent="removeOptionCheckbox" class="ml-2") -
-              div(v-if="selectType==='open'")
-                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las respuestas abiertas no tienen opciones. Podran responder libremente.
+              .group-options(v-if="selectType[i - 1]==='open'")
+                p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las respuestas abiertas no tienen opciones de respuesta. Tienen 1000 caracteres para responder libremente.
+
               v-btn(color="#246d7b" class="mt-5" style="color:white" block @click.prevent="addQuestion") Nueva pregunta
       v-flex(xs12 md5 offset-md1)
         h4.heading Previsualización <br />
@@ -268,6 +269,9 @@ export default {
         this.formPoll.questions[this.question - 1].options[0] = 'Opción 1'
       }
     },
+    toggleModalSelectCommunity() {
+      this.$store.commit('TOGGLE_MODAL_SELECT_COMMUNITY')
+    },
     updateLabel() {
       console.log('Estamos dentro del update')
       const self = this
@@ -282,9 +286,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-ul {
-  margin: 0 0 0.5rem 0;
-  padding: 0;
+ul li {
+  list-style: none;
 }
 .group-buttons-type {
   display: grid;
