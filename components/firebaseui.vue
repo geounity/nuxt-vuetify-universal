@@ -29,6 +29,7 @@ export default {
       callbacks: {
         signInSuccessWithAuthResult() {
           console.log('signInSuccessWithAuthResult')
+          self.$store.dispatch('TOGGLE_MODAL_SIGNIN')
           self.$emit('nextStep')
           self.$router.push('/')
         },

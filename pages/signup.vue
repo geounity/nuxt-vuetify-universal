@@ -1,12 +1,8 @@
 <template lang="pug">
   v-layout(justify-center wrap)
-    v-flex(xs12)
+    v-flex(lg10)
       v-alert(:value="true" color="info" class="mb-2" dismissible)
         span.white--text Se uno de los pimeros usuarios en registrarse
-    v-flex(xs12)
-      h6.caption Mi comunidad:
-      v-breadcrumbs(:items="items" divider="<").pa-1
-    v-flex(lg10)
       v-stepper(v-model="step" alt-labels)
         v-stepper-header
           v-stepper-step(:complete="step > 1" step="1" editable color="#246d7b") Tu comunidad
@@ -17,13 +13,13 @@
         v-stepper-items(class="mt-2")
 
           v-stepper-content(step="1" class="pa-0 text-xs-center")
-            h2.title.text-center Seleccione una comunidad
             world-map(v-if="geocommunity.length >= 1" @selectedCountry="handleSelectedCountry")
             v-select(
               v-if="geocommunity.length >= 3"
               v-model="selectedState"
               :items="states"
               style="max-width:400px; margin:0 auto"
+              class="my-5"
               :label="label"
               @change="selectState"
               solo
@@ -32,7 +28,8 @@
             //-   argentina-map(v-if="country.code === 'AR'")
             //- template(v-else)
             //-   h2.title Otro mapa u en su defecto un input select
-            v-btn(color="success" @click="step = 2" block class="mt-3") Continuar
+            h2.title.text-center.my-2 Seleccione una comunidad
+            v-btn(color="success" @click="step = 2" class="mb-5" block) Continuar
 
           v-stepper-content(step="2")
             v-layout( justify-space-around wrap)
@@ -57,7 +54,12 @@ import CompleteInfoUser from '~/components/forms/CompleteInfoUser.vue'
 export default {
   name: 'Signup',
   // components: { WorldMap, FirebaseUi, CompleteInfoUser },
-  components: { CompleteInfoUser, WorldMap, formNewUser, FirebaseUi },
+  components: {
+    CompleteInfoUser,
+    WorldMap,
+    formNewUser,
+    FirebaseUi
+  },
   data() {
     return {
       errors: '',

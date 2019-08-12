@@ -2,7 +2,7 @@
 
 module.exports = {
   server: {
-    port: 3001
+    port: 3000
   },
   mode: 'universal',
   router: {

@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 import { auth, storage, db } from '~/plugins/firebase'
 import apiGeounity from '~/plugins/api'
 
-import { getUserFromCookie } from '@/helpers'
+// import { getUserFromCookie } from '@/helpers'
 
 export const state = () => ({
   loading: false,
@@ -38,19 +38,16 @@ export const state = () => ({
 
 export const getters = {
   // users
-  avatar(state) {
-    if (state.user && state.user.photoURL) return state.user.photoURL
+  avatar: (state) => {
+    if (state.user) return state.user.photoURL
+    else return null
   },
-  isAuthenticated(state) {
-    return !!state.user && !!state.user.uid
-  },
-  uid(state) {
+  isAuthenticated: (state) => !!state.user && !!state.authId,
+  uid: (state) => {
     if (state.user && state.user.uid) return state.user.uid
     else return null
   },
-  username(state) {
-    return state.user.username
-  },
+  username: (state) => state.user.username,
   // geocmmunities
   items: (state) => {
     return state.geocommunity.map((item) => {
@@ -74,16 +71,16 @@ export const mutations = {
   DELETE_IMAGE_USER: (state) => {
     state.user.photoURL = ''
   },
-  SAVE_AUTHID(state, uid) {
-    console.log('[STORE MUTATIONS] - saveUID:', uid)
+  SET_AUTHID(state, uid) {
+    console.log('[STORE MUTATIONS] - SAVE_UID:', uid)
     state.authId = uid
   },
   SET_USER(state, user) {
-    console.log('[STORE MUTATIONS] - serUSER:', user)
+    console.log('[STORE MUTATIONS] - SET_USER:', user)
     state.user = user
   },
   UPDATE_PROGRESS_UPLOAD: (state, sp) => {
-    state.progressUpload = sp
+    state.progressUpload = sp.toFixed(2)
   },
   UPDATE_USER: (state, payload) => {
     state.user = {
@@ -124,22 +121,25 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ dispatch }, { req }) {
-    auth.onAuthStateChanged(function(user) {
-      if (user) {
-        console.log('user', user)
-      }
-    })
-    const userCookie = getUserFromCookie(req)
-    if (userCookie) {
-      await dispatch('modules/user/SET_USER', {
-        name: userCookie.name,
-        email: userCookie.email,
-        avatar: userCookie.picture,
-        uid: userCookie.user_id
-      })
-    }
-  },
+  // async nuxtServerInit({ dispatch }, { req }) {
+  //   const currentUser = auth.currentUser
+  //   console.log('currentUser')
+  //   console.log(currentUser)
+  //   auth.onAuthStateChanged(function(user) {
+  //     if (user) {
+  //       console.log('user', user)
+  //     }
+  //   })
+  //   const userCookie = getUserFromCookie(req)
+  //   if (userCookie) {
+  //     await dispatch('SET_USER', {
+  //       name: userCookie.name,
+  //       email: userCookie.email,
+  //       avatar: userCookie.picture,
+  //       uid: userCookie.user_id
+  //     })
+  //   }
+  // },
   // users
   CREATE_USER: ({ state, commit }, { email, username, password }) =>
     new Promise(async (resolve, reject) => {
@@ -151,8 +151,6 @@ export const actions = {
           .createUserWithEmailAndPassword(email, password)
           .then((account) => {
             account.snapshotlayName = username
-            console.log('ACCOUNT')
-            console.log(account)
             const newUser = {
               email,
               username,
@@ -164,18 +162,20 @@ export const actions = {
               .then((doc) => {
                 console.log('Document written with ID: ', doc.id)
                 commit('SET_USER', { ...newUser, idDoc: doc.id })
-                apiGeounity.post('/signup', newUser)
+                apiGeounity.post('/signup', { ...newUser, idDoc: doc.id })
                 resolve(state.user)
               })
-              .catch((e) => {
-                reject(new Error(e))
+              .catch(() => {
+                reject(new Error('Problemas al guardar en Firestore'))
               })
             // Guardar en Cloud
-            console.log('newUser')
-            console.log(newUser)
           })
-          .catch((e) => {
-            reject(new Error(e))
+          .catch(() => {
+            reject(
+              new Error(
+                'La dirección de correo ya esta siendo usada por otra cuenta.'
+              )
+            )
           })
       }
     }),
@@ -205,33 +205,21 @@ export const actions = {
     commit('SET_AUTHID', userId)
   },
   PUT_INFO_USER: ({ state, commit }, payload) => {
-    const { fileName, name, lastname, datebirth } = payload
-    console.log(
-      'fileName',
-      fileName,
-      'name',
-      name,
-      'lastname',
-      lastname,
-      'birthDate',
-      datebirth
-    )
+    console.log('[STORE PUT_INFO_USER]', payload)
     const username = state.user.username
-    apiGeounity
-      .post(`/${username}/aditional-info`, {
-        name,
-        lastname,
-        datebirth
-      })
-      .catch((e) => {
-        commit('SET_ERROR', e)
-      })
-    storage
-      .ref()
-      .put(fileName)
-      .then((snapshot) => {
-        console.log('Uploaded a blob or file!', snapshot)
-      })
+    apiGeounity.post(`/${username}/aditional-info`, payload).catch((e) => {
+      commit(
+        'SET_ERROR',
+        `No se pudo actualizar la información del usuario ${e}`
+      )
+    })
+  },
+  PUT_PHOTO_USER: ({ state, commit }, payload) => {
+    console.log('[STORE PUT_PHOTO_USER]', payload)
+    const username = state.user.username
+    apiGeounity.post(`/${username}/addphoto`, payload).catch((e) => {
+      commit('SET_ERROR', `No se pudo cargar la imagen ${e}`)
+    })
   },
   SIGN_IN: (ctx, { email, password }) => {
     return auth.signInWithEmailAndPassword(email, password)
@@ -244,7 +232,7 @@ export const actions = {
       commit('SAVE_AUTHID', null)
     })
   },
-  UPLOAD_IMAGE_USER: ({ state, commit }, file) => {
+  UPLOAD_IMAGE_USER: ({ state, dispatch, commit }, file) => {
     const uploadTask = storage
       .ref('images/' + `${state.user.username}-${file.name}`)
       .put(file)
@@ -257,11 +245,12 @@ export const actions = {
         )
       },
       function(error) {
-        console.log('Error: ', error)
+        console.log('Error al cargar la imagen: ', error)
       },
       function() {
         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
           commit('UPDATE_USER_IMAGE', downloadURL)
+          dispatch('PUT_PHOTO_USER', downloadURL)
           commit('LOADING_OFF')
         })
       }

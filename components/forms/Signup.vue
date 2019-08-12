@@ -35,15 +35,12 @@
       label="Acepto los Terminos y Condiciones"
       required
     )
-    loading(v-if="loading")
-    v-btn(:disabled="!value" color="success" block @click.prevent="validate") Continue
+    v-btn(:disabled="!value" :loading="loading" color="success" block @click.prevent="validate") Continue
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import Loading from '~/components/Loading'
 export default {
-  components: { Loading },
   data() {
     return {
       value: true,
@@ -78,14 +75,16 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.commit('LOADING_ON')
         this.$store
-          .dispatch('modules/user/CREATE_USER', this.formRegister)
+          .dispatch('CREATE_USER', this.formRegister)
           .then(() => {
             this.$emit('nextStep')
+            this.$store.commit('SET_ERROR', null)
+            this.$store.commit('LOADING_OFF')
           })
           .catch((e) => {
             this.$store.commit('SET_ERROR', e)
+            this.$store.commit('LOADING_OFF')
           })
-        this.$store.commit('LOADING_OFF')
       } else {
         console.log('Formulario INVALIDO!')
       }
