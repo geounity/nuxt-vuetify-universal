@@ -1,11 +1,11 @@
 <template lang="pug">
   main
-    v-layout(v-if="!authId" class="blue-grey darken-4" justify-center wrap)
+    v-layout(v-if="!authId" justify-center wrap)
       v-flex(xs12 class="text-center")
         world-map
-      v-flex(xs11)
+      v-flex(xs12 blue-grey darken-4)
         h1(:class="fontSize").py-5.text-center.white--text Somos Comunidad Global Online
-      v-layout
+      v-flex(xs12 wrap)
         ul.list-continents.my-5
           li(v-for="(item, i) in continents" :key="i" nuxt :to="item.path" active-class="highlighted" :class="item.name === continent.name ? 'highlighted' : ''") {{item.name}}
       v-layout(v-if="geocommunity.length>2" justify-center row wrap)
