@@ -8,6 +8,6 @@ export default function({ store, route, redirect }) {
   }
 
   if (user && route.path === homeRoute) {
-    redirect('/admin')
+    // redirect('/admin')
   }
 }

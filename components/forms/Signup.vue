@@ -27,7 +27,6 @@
       name="password"
       type="password"
       required
-      @keyup.enter="validate"
     )
     v-checkbox(
       v-model="checkbox"

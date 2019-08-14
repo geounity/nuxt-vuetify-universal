@@ -7,7 +7,7 @@ import apiGeounity from '~/plugins/api'
 export const state = () => ({
   loading: false,
   error: false,
-  showModalLogin: false,
+  overlay: false,
   authId: '',
   user: null,
   progressUpload: 0,
@@ -28,7 +28,7 @@ export const state = () => ({
 export const getters = {
   // users
   avatar: (state) => {
-    if (state.user) return state.user.photoURL
+    if (state.user && state.user.photoURL) return state.user.photoURL
     else return null
   },
   isAuthenticated: (state) => !!state.user && !!state.authId,
@@ -96,8 +96,8 @@ export const mutations = {
   SET_MODAL_STATE: (state, { name, value }) => {
     state.modals[name] = value
   },
-  TOGGLE_MODAL_SIGNIN: (state) => {
-    state.showModalLogin = !state.showModalLogin
+  TOGGLE_OVERLAY_SIGNIN: (state) => {
+    state.overlay = !state.overlay
   },
   UPDATE_GEOCOMMUNITY: (state, payload = {}) => {
     const l = state.geocommunity.length
@@ -191,10 +191,11 @@ export const actions = {
         commit('SET_ERROR', e)
       })
   },
-  FETCH_USER: ({ state, commit }, { id }) =>
-    new Promise((resolve) => {
-      resolve('Hola fetch user')
-    }),
+  FETCH_USER: async ({ state, commit }, email) => {
+    let user = ''
+    user = await apiGeounity.get(`/user/email/${email}`)
+    commit('SET_USER', user.data)
+  },
   FETCH_AUTH_USER: ({ commit }) => {
     const userId = auth.currentUser.uid
     commit('SET_AUTHID', userId)

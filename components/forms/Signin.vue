@@ -1,7 +1,7 @@
 <template lang="pug">
-  v-layout(justify-center wrap class="mt-5")
-    v-flex(xs11 md8 lg5 xl3)
-      v-form(v-model="value" ref="form" lazy-validation class="my-1" style="max-width: 500px; margin: 0 auto")
+  v-row(justify-center wrap class="mt-5")
+    v-col(xs12 md8 lg6 xl4)
+      v-form(v-model="value" ref="form" lazy-validation class="my-1" style="max-width:600px;margin:0 auto")
         h2(heading class="text-center mb-5") Iniciar sesión
         v-text-field(
           v-model="formLogin.email"  
@@ -23,7 +23,8 @@
           required
         )
         v-btn(:disabled="!value" color="success" block @click="loginHandlerSubmit" @keyup.enter="loginHandlerSubmit") Iniciar sesión
-    v-flex(xs12 md4 lg5 xl3)
+    v-divider(vertical)
+    v-col(xs12 md4 lg6 xl4)
       no-ssr
         firebase-ui
 </template>
@@ -61,8 +62,8 @@ export default {
           })
           .then((res) => {
             this.$store.dispatch('FETCH_AUTH_USER')
-            console.log('RESPUESTA')
-            console.log(res)
+            this.$store.dispatch('FETCH_USER', res.user.email)
+            this.$store.commit('TOGGLE_MODAL_SIGNIN')
           })
           .catch(function(error) {
             const errorCode = error.code

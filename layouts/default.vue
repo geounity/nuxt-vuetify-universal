@@ -1,15 +1,15 @@
-<template>
-  <v-app>
-    <gu-appbar></gu-appbar>
-    <v-content>
-      <nuxt />
-    </v-content>
-    <gu-footer></gu-footer>
-    <gu-bottom-nav class="hidden-md-and-up"></gu-bottom-nav>
-    <gu-modal-login :show="showModalLogin">
-      <gu-form-signin></gu-form-signin>
-    </gu-modal-login>
-  </v-app>
+<template lang="pug">
+  v-app
+    gu-appbar
+    v-content
+      nuxt
+    gu-footer
+    gu-bottom-nav(class="hidden-md-and-up")
+    v-overlay(:value="overlay")
+      .box
+        v-btn(icon @click="toggleOverlayLogin" color="#000" style="position:absolute;top:0;right:0")
+          v-icon(style="font-size:2rem") mdi-close
+        gu-form-signin
 </template>
 
 <script>
@@ -37,7 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['showModalLogin', 'showModalSelectCommunity'])
+    ...mapState(['overlay', 'showModalSelectCommunity'])
   },
   beforeMount() {
     const self = this
@@ -63,6 +63,19 @@ export default {
         console.log('NO LOGIN')
       }
     })
+  },
+  methods: {
+    toggleOverlayLogin() {
+      this.$store.commit('TOGGLE_OVERLAY_SIGNIN')
+    }
   }
 }
 </script>
+
+<style>
+.box {
+  background-color: #fafafa;
+  color: #222;
+  padding: 2em 5em;
+}
+</style>
