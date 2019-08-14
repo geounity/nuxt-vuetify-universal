@@ -35,7 +35,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 body,
 html {
   height: 100% !important;
@@ -52,16 +52,16 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  h3 {
-    margin: 8px 0px;
-    text-align: center;
-    font-weight: normal;
-  }
-  p {
-    font-size: 14px;
-    margin: 0px;
-    color: #999;
-    text-align: center;
-  }
+}
+.empty_state h3 {
+  margin: 8px 0px;
+  text-align: center;
+  font-weight: normal;
+}
+.empty_state p {
+  font-size: 14px;
+  margin: 0px;
+  color: #999;
+  text-align: center;
 }
 </style>

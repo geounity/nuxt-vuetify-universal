@@ -8,12 +8,18 @@
     v-toolbar-items(style="display:flex;align-items:center")
       v-btn( v-if="!isAuthenticated" @click.prevent="toggleModalHandle" x-small text class="font-weight-black" max-height="37" color="rgb(62, 6, 148)") Login
       v-btn( v-if="!isAuthenticated" nuxt to="/signup" x-small class="font-weight-black my-btn-color" max-height="37" class="px-4") Registrate
-      v-btn( v-if="isAuthenticated" nuxt to="/user/profile" x-small ) {{username}}
-      v-btn( v-if="isAuthenticated" @click="signOut" x-small text ) Cerrar sesión 
+      v-menu(v-if="isAuthenticated" transition="slide-y-transition" bottom)
+        template(v-slot:activator="{on}")
+          v-btn(class="purple" color="primary" darl v-on="on") {{username}}
+        v-list
+          v-list-item
+            v-btn( nuxt to="/user/profile" text ) Mi perfil
+          v-list-item
+            v-btn( @click="signOut" text ) Cerrar sesión 
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Appbar',
   data() {
@@ -32,12 +38,12 @@ export default {
     }
   },
   computed: {
-    ...mapState(['username']),
-    ...mapGetters(['isAuthenticated'])
+    ...mapGetters(['isAuthenticated', 'username'])
   },
   methods: {
-    signOut() {
-      this.$store.dispatch('SIGN_OUT')
+    async signOut() {
+      await this.$store.dispatch('SIGN_OUT')
+      this.$nuxt.$router.push('/')
     },
     toggleModalHandle() {
       this.$store.commit('TOGGLE_MODAL_SIGNIN')

@@ -285,7 +285,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 ul li {
   list-style: none;
 }
@@ -297,8 +297,8 @@ ul li {
 }
 .group-options {
   text-align: center;
-  // display: flex;
-  // flex-wrap: wrap;
-  // justify-content: space-around;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 </style>

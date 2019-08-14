@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
-import env from './config'
+import env from '../plugins/config'
 if (!firebase.apps.length) {
   const config = {
     apiKey: env.firebase.apiKey,

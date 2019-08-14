@@ -75,7 +75,9 @@
               img(:src="avatar?avatar:'/sinfoto.png'" class="mr-4" style="border-radius:50%:float:left")
             div
               h4.caption #[strong {{username}}] ( {{formInfo.name}} {{formInfo.lastname}} )
-              h5.overline {{formInfo.datebirth?yearsOld:'xx'}} años
+              h5.overline
+                span {{formInfo.datebirth?yearsOld:'xx'}} años
+                span(style="font-size:0.9em;margin-left:0.5em") {{formInfo.service}}
           v-card-text
             p Esto es un texto de ejemplo. Usted puede dar su punto de vista sobre algún debate. Su opinión aparecera en una caja como esta.
           v-divider

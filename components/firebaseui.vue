@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { auth, authProviders } from '~/plugins/firebase'
+import { auth, authProviders } from '~/services/firebase'
 
 export default {
   name: 'UserLogin',

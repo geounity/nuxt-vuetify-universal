@@ -9,13 +9,15 @@
     "test": "jest",
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "start": "cross-env NODE_ENV=production node server/index.js",
     "heroku-postbuild": "npm run build",
     "generate": "nuxt generate"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.5.4",
+    "@nuxtjs/eslint-config": "^1.0.1",
     "@nuxtjs/pwa": "^2.6.0",
+    "@nuxtjs/vuetify": "^1.1.1",
     "cookieparser": "^0.1.0",
     "cross-env": "^5.2.0",
     "express": "^4.16.4",
@@ -29,9 +31,6 @@
     "trae": "^1.4.2"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^1.0.1",
-    "@nuxtjs/eslint-module": "^0.2.1",
-    "@nuxtjs/vuetify": "^1.1.1",
     "@vue/test-utils": "^1.0.0-beta.27",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",

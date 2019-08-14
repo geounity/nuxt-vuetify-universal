@@ -14,7 +14,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { auth } from '~/plugins/firebase'
+import { auth } from '~/services/firebase'
 
 import guAppbar from '~/components/layout/Appbar.vue'
 import guBottomNav from '~/components/layout/BottomNav.vue'
@@ -45,8 +45,6 @@ export default {
       if (user) {
         // User is signed in.
         console.log('USER LOGEADO')
-        console.log(user)
-        const username = user.displayName
         const email = user.email
         const emailVerified = user.emailVerified
         const photoURL = user.photoURL
@@ -54,7 +52,6 @@ export default {
         user.getIdToken().then(function(accessToken) {
           self.$store.dispatch('FETCH_AUTH_USER')
           self.$store.commit('SET_USER', {
-            username,
             email,
             emailVerified,
             photoURL,

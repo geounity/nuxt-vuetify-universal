@@ -2,18 +2,18 @@
 
 module.exports = {
   server: {
-    port: 3000
+    port: 8080
   },
   mode: 'universal',
   router: {
-    middleware: 'router-auth'
+    middleware: ['authenticated']
   },
   /*
    ** Headers of the page
    */
   head: {
     // titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    title: 'Geounity',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -54,7 +54,6 @@ module.exports = {
    */
   devModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify'
   ],
   /*

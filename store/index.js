@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import { auth, storage, db } from '~/plugins/firebase'
+import { auth, storage, db } from '~/services/firebase'
 import apiGeounity from '~/plugins/api'
 
 // import { getUserFromCookie } from '@/helpers'
@@ -9,18 +9,7 @@ export const state = () => ({
   error: false,
   showModalLogin: false,
   authId: '',
-  user: {
-    uid: '',
-    username: '',
-    email: null,
-    emailVerified: null,
-    photoURL: '',
-    idDoc: '',
-    accessToken: '',
-    phoneNumber: '',
-    providerData: '',
-    community: '' // Haciendo referencia a Global
-  },
+  user: null,
   progressUpload: 0,
   geocommunity: [
     {
@@ -47,7 +36,10 @@ export const getters = {
     if (state.user && state.user.uid) return state.user.uid
     else return null
   },
-  username: (state) => state.user.username,
+  username: (state) => {
+    if (state.user && state.user.username) return state.user.username
+    else return null
+  },
   // geocmmunities
   items: (state) => {
     return state.geocommunity.map((item) => {
@@ -77,16 +69,13 @@ export const mutations = {
   },
   SET_USER(state, user) {
     console.log('[STORE MUTATIONS] - SET_USER:', user)
-    state.user = user
+    state.user = {
+      ...state.user,
+      ...user
+    }
   },
   UPDATE_PROGRESS_UPLOAD: (state, sp) => {
     state.progressUpload = sp.toFixed(2)
-  },
-  UPDATE_USER: (state, payload) => {
-    state.user = {
-      ...state.user,
-      ...payload
-    }
   },
   UPDATE_USER_IMAGE: (state, photo) => {
     state.user.photoURL = photo
@@ -161,9 +150,15 @@ export const actions = {
               .add(newUser)
               .then((doc) => {
                 console.log('Document written with ID: ', doc.id)
-                commit('SET_USER', { ...newUser, idDoc: doc.id })
-                apiGeounity.post('/signup', { ...newUser, idDoc: doc.id })
-                resolve(state.user)
+                apiGeounity
+                  .post('/signup', { ...newUser, idDoc: doc.id })
+                  .then(() => {
+                    commit('SET_USER', { ...newUser, idDoc: doc.id })
+                    resolve(state.user)
+                  })
+                  .catch((err) => {
+                    reject(new Error(`en la base de datos: ${err}`))
+                  })
               })
               .catch(() => {
                 reject(new Error('Problemas al guardar en Firestore'))
@@ -293,6 +288,7 @@ export const actions = {
     const userInfo = {
       name: user.displayName,
       email: user.email,
+      username: user.username,
       avatar: user.photoURL,
       uid: user.uid
     }

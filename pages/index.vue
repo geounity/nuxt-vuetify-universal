@@ -31,7 +31,7 @@
             li Puede indicar la siguiente pregunta en función de la respuesta anterior.
             li Publique la encuesta y mire los resultados en tiempo real.
           v-card-actions
-            v-btn(color="success" block) Crear
+            v-btn(nuxt to="/poll/new" color="success" block) Crear
       v-card(class="mx-5" style="max-width:300px" class="elevation-7")
         v-card-title
           h2.headline.text-center.mb-3(style="width:100%") Abre un nuevo debate
