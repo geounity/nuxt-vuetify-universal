@@ -1,5 +1,6 @@
 const configServices = {
-  apiUrl: 'http://localhost:4949',
+  // apiUrl: 'http://localhost:4949',
+  apiUrl: 'http://35.247.210.148',
   firebase: {
     apiKey: 'AIzaSyA1frqipSZPFk61yfDQ9-uGSYXDuwxqdAg',
     authDomain: 'geounity.firebaseapp.com',

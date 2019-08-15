@@ -7,7 +7,7 @@
     gu-bottom-nav(class="hidden-md-and-up")
     v-overlay(:value="overlay")
       .box
-        v-btn(icon @click="toggleOverlayLogin" color="#000" style="position:absolute;top:0;right:0")
+        v-btn(icon @click="toggleOverlayLogin" color="#000" style="position:absolute;right:0")
           v-icon(style="font-size:2rem") mdi-close
         gu-form-signin
 </template>
@@ -76,6 +76,6 @@ export default {
 .box {
   background-color: #fafafa;
   color: #222;
-  padding: 2em 5em;
+  padding: 0.1em 0;
 }
 </style>

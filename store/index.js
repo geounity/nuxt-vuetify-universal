@@ -198,6 +198,8 @@ export const actions = {
   },
   FETCH_AUTH_USER: ({ commit }) => {
     const userId = auth.currentUser.uid
+    console.log('userId')
+    console.log(userId)
     commit('SET_AUTHID', userId)
   },
   PUT_INFO_USER: ({ state, commit }, payload) => {
@@ -220,12 +222,13 @@ export const actions = {
   SIGN_IN: (ctx, { email, password }) => {
     return auth.signInWithEmailAndPassword(email, password)
   },
-  SIGN_OUT: ({ commit }) => {
+  SIGN_OUT: ({ commit, redirect }) => {
     console.log('[STORE ACTIONS] - SIGN_OUT')
     auth.signOut().then(() => {
       Cookies.remove('access_token')
       commit('SET_USER', null)
       commit('SAVE_AUTHID', null)
+      return redirect('/')
     })
   },
   UPLOAD_IMAGE_USER: ({ state, dispatch, commit }, file) => {

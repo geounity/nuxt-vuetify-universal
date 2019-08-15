@@ -4,7 +4,7 @@
       v-flex(xs12 class="text-center")
         world-map
       v-flex(xs12 blue-grey darken-4)
-        h1(:class="fontSize").py-5.text-center.white--text Somos Comunidad Global Online
+        h1(v-if="geocommunity.length<2" :class="fontSize").py-5.text-center.white--text Somos Comunidad Global Online
       v-flex(xs12 wrap)
         ul.list-continents.my-5
           li(v-for="(item, i) in continents" :key="i" nuxt :to="item.path" active-class="highlighted" :class="item.name === continent.name ? 'highlighted' : ''") {{item.name}}

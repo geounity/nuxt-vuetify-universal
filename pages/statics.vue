@@ -2,11 +2,14 @@
   main
     v-container(fluid)
       gu-breadcrumbs
-    v-container(v-if="statics && statics.length !== 0")
-      v-layout
-        v-flex(v-for="(s, i) in statics" :key="i")
-          gu-static-card( :static="s" )
-    empty-page(v-else page="encuesta")
+    h1.subtitle Estadísticas
+    v-container(v-for="(item, k) in items" :key="k")
+      h1.title En {{item.text}}
+      v-container(v-if="statics && statics.length !== 0")
+        v-layout
+          v-flex(v-for="(s, i) in statics" :key="i")
+            gu-static-card( :static="s" )
+      empty-page(v-else page="encuesta")
 </template>
 
 <script>
@@ -22,7 +25,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters(['statics'])
+    ...mapGetters(['items', 'statics'])
   }
 }
 </script>

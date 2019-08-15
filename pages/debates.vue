@@ -2,11 +2,14 @@
   main
     v-container(fluid)
       gu-breadcrumbs
-    v-container(v-if="debates && debates.length !== 0")
-      v-layout
-        v-flex(v-for="(d, i) in debates" :key="i")
-          gu-debate-card( :debate="d" )
-    empty-page(v-else page="debate")
+    h1.subtitle Debates
+    v-container(v-for="(item, k) in items" :key="k")
+      h1.title En {{item.text}}
+      v-container(v-if="debates && debates.length !== 0")
+        v-layout
+          v-flex(v-for="(d, i) in debates" :key="i")
+            gu-static-card( :debate="d" )
+      empty-page(v-else page="debate")
 </template>
 
 <script>
@@ -21,7 +24,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters(['debates'])
+    ...mapGetters(['items', 'debates'])
   }
 }
 </script>

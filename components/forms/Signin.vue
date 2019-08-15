@@ -1,7 +1,7 @@
 <template lang="pug">
-  v-row(justify-center wrap class="mt-5")
-    v-col(xs12 md8 lg6 xl4)
-      v-form(v-model="value" ref="form" lazy-validation class="my-1" style="max-width:600px;margin:0 auto")
+  v-row(justify="center" wrap class="mt-5")
+    v-col(cols="10" align-self-center)
+      v-form(v-model="value" ref="form" lazy-validation class="my-1")
         h2(heading class="text-center mb-5") Iniciar sesión
         v-text-field(
           v-model="formLogin.email"  
@@ -23,8 +23,7 @@
           required
         )
         v-btn(:disabled="!value" color="success" block @click="loginHandlerSubmit" @keyup.enter="loginHandlerSubmit") Iniciar sesión
-    v-divider(vertical)
-    v-col(xs12 md4 lg6 xl4)
+    v-col(cols="12")
       no-ssr
         firebase-ui
 </template>

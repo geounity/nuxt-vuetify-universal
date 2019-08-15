@@ -2,11 +2,14 @@
   main
     v-container(fluid)
       gu-breadcrumbs
-    v-container(v-if="aims && aims.length !== 0")
-      v-layout
-        v-flex(v-for="(a, i) in aims" :key="i")
-          gu-card-aim( :aim="a")
-    empty-page(v-else page="idea")
+    h1.subtitle Proyectos
+    v-container(v-for="(item, k) in items" :key="k")
+      h1.title En {{item.text}}
+      v-container(v-if="aims && aims.length !== 0")
+        v-layout
+          v-flex(v-for="(aim, i) in aims" :key="i")
+            gu-static-card( :aim="aim" )
+      empty-page(v-else page="idea")
 </template>
 
 <script>
@@ -21,7 +24,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters(['aims'])
+    ...mapGetters(['items', 'aims'])
   }
 }
 </script>

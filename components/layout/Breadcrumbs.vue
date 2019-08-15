@@ -1,8 +1,7 @@
 <template lang="pug">
   v-row(justfify-center align-center)
-    v-btn(small color="primary" class="ml-3") Crear encuesta
-    strong(class="mt-1 ml-3") En la comunidad de:
-    v-breadcrumbs(:items="items" divider="<" class="pa-0 pl-5 ma-")
+    strong(class="ml-2") Mi comunidad:
+    v-breadcrumbs(:items="items" divider="<" class="pa-0 pl-2")
 </template>
 
 <script>

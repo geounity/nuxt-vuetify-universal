@@ -20,16 +20,6 @@
     v-btn(
       color="teal"
       text
-      value="communities"
-      nuxt
-      to='/communities'
-      class="fix-minwidth"
-    )
-      span Communities
-      v-icon mdi-account-group
-    v-btn(
-      color="teal"
-      text
       value="statics"
       nuxt
       to='/statics'
@@ -57,6 +47,16 @@
     )
       span Aims
       v-icon mdi-lightbulb-on-outline
+    v-btn(
+      color="teal"
+      text
+      value="communities"
+      nuxt
+      to='/communities'
+      class="fix-minwidth"
+    )
+      span Communities
+      v-icon mdi-account-group
     
 </template>
 
