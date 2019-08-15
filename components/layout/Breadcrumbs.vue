@@ -1,8 +1,8 @@
 <template lang="pug">
-  v-layout(align-center wrap)
-    v-subheader En la comunidad de:
-    v-breadcrumbs(:items="items" divider="<" class="pa-0 mr-3")
-    v-btn(small color="primary") cambiar
+  v-row(justfify-center align-center)
+    v-btn(small color="primary" class="ml-3") Crear encuesta
+    strong(class="mt-1 ml-3") En la comunidad de:
+    v-breadcrumbs(:items="items" divider="<" class="pa-0 pl-5 ma-")
 </template>
 
 <script>

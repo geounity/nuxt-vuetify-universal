@@ -25,6 +25,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import guFormSignin from '~/components/forms/Signin.vue'
+import { setTimeout } from 'timers';
 
 export default {
   name: 'Appbar',
@@ -48,9 +49,14 @@ export default {
     ...mapGetters(['avatar', 'isAuthenticated', 'username'])
   },
   methods: {
-    async signOut() {
-      this.$nuxt.$router.push('/')
-      await this.$store.dispatch('SIGN_OUT')
+    signOut() {
+      this.$store.dispatch('SIGN_OUT')
+        .then(()=> {
+          let self = this
+          setTimeout(()=>{
+            self.$nuxt.$router.push('/')
+          },1000)
+        })
     },
     toggleOverlayLogin() {
       this.$store.commit('TOGGLE_OVERLAY_SIGNIN')

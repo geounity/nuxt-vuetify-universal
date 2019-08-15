@@ -28,7 +28,6 @@
             //-   argentina-map(v-if="country.code === 'AR'")
             //- template(v-else)
             //-   h2.title Otro mapa u en su defecto un input select
-            h2.title.text-center.my-2 Seleccione una comunidad
             v-btn(color="success" @click="step = 2" class="mb-5" block) Continuar
 
           v-stepper-content(step="2")

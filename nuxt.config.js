@@ -33,6 +33,9 @@ module.exports = {
       }
     ]
   },
+  devServer: {
+    proxy: 'http://backend.test'
+  },
   /*
    ** Customize the progress-      {
         type: 'text/javascript',
