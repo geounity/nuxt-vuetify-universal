@@ -1,11 +1,11 @@
 <template lang="pug">
   v-container
-    v-layout(align-center wrap class="mt-1")    
-      v-subheader Para la comunidad de:
-      v-breadcrumbs(:items="items" divider="<" class="pa-0 mr-3")
-      v-btn(@click.prevent="toggleModalSelectCommunity" text color="primary").caption Cambiar
+    v-row(align-center wrap)
+      v-col
+        gu-breadcrumbs
     v-layout(justify-center wrap)
       v-flex(xs12)
+        h3.caption Se creara una encuesta para la comunidad seleccionada
         h4.heading.mt-2 Título de la encuesta <br />
         v-text-field(
           v-model="formPoll.title"
@@ -56,65 +56,69 @@
               .group-options(v-if="selectType[i - 1]==='boolean'")
                 p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las preguntas dicotómicas solo tienen una opción entre dos. Generalmente suelen ser SI/NO MUJER/HOMBRE POSITIVO/NEGATIVO etc. Usted las puede modificar.
                 h3.body-2.mb-3.mt-5 Opciones para respuestas:
-                div(style="display:flex;justify-content:space-around")
-                  v-text-field(
-                    v-model="formPoll.questions[i - 1].options[0]"
-                    type="text"
-                    style="max-width:150px"
-                    outlined                
-                  )
-                  v-text-field(
-                    v-model="formPoll.questions[i - 1].options[1]"
-                    type="text"
-                    style="max-width:150px"
-                    outlined
-                  )
+                v-row(justify="center")
+                  v-col(cols="5")
+                    v-text-field(
+                      v-model="formPoll.questions[i - 1].options[0]"
+                      type="text"
+                      style="max-width:150px"
+                      solo            
+                    )
+                  v-col(cols="5")
+                    v-text-field(
+                      v-model="formPoll.questions[i - 1].options[1]"
+                      type="text"
+                      style="max-width:150px"
+                      solo
+                    )
               .group-options(v-if="selectType[i - 1]==='number'")
                 p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Las preguntas númericas solo aceptan números enteros como respuestas. Usted puede definir el rango que deberá tener la respuesta.
                 h3.body-2.mb-3.mt-5 Opciones para respuestas:
-                div(style="display:flex;justify-content:space-around")
-                  v-text-field(
-                    v-model="formPoll.questions[i - 1].options[0]"
-                    label="Min"
-                    class="mt-1"
-                    type="number"
-                    style="max-width:100px"
-                    @change="updateLabel"
-                    outlined
-                  )
-                  v-text-field(
-                    v-model="formPoll.questions[i - 1].options[1]"
-                    label="Max"
-                    class="mt-1"
-                    type="number"
-                    style="max-width:100px"
-                    @change="updateLabel"
-                    outlined
-                  )
+                v-row(justify="center")
+                  v-col(cols="5")
+                    v-text-field(
+                      v-model="formPoll.questions[i - 1].options[0]"
+                      label="Min"
+                      class="mt-1"
+                      type="number"
+                      style="max-width:100px"
+                      @change="updateLabel"
+                      outlined
+                    )
+                  v-col(cols="5")
+                    v-text-field(
+                      v-model="formPoll.questions[i - 1].options[1]"
+                      label="Max"
+                      class="mt-1"
+                      type="number"
+                      style="max-width:100px"
+                      @change="updateLabel"
+                      outlined
+                    )
               .group-options(v-if="selectType[i - 1]==='radio'")
                 p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Estas preguntas tienen 3 o mas opciones y solo podrá seleccionar una sola. Si quiere usar dos opciones use las de tipo dicotómica.
                 h3.body-2.mb-3.mt-5 Opciones para respuestas:
-                v-text-field(
-                  v-for="(r, j) in radios"
-                  :key="j"
-                  v-model="formPoll.questions[i - 1].options[j]"
-                  type="text"
-                  outlined
-                  width="100%"
-                )
+                v-row(justify="center")
+                  v-col(cols="10" v-for="(r, j) in radios" :key="j")
+                    v-text-field(
+                      v-model="formPoll.questions[i - 1].options[j]"
+                      type="text"
+                      width="100%"
+                      outlined
+                    )
                 v-btn(color="secondary" @click.prevent="addOptionRadio" class="mr-2") +
                 v-btn(color="secondary" @click.prevent="removeOptionRadio" class="ml-2") -
               .group-options(v-if="selectType[i - 1]==='checkbox'")
                 p.caption.text-left.mt-5(style="background-color:#ddd;padding:0.5rem") Estas preguntas tienen 2 o mas opciones y podrá seleccionar las que quiera incluyendo ninguna o todas.
                 h3.body-2.mb-3.mt-5 Opciones para respuestas:
-                v-text-field(
-                  v-for="(c, j) in checkboxs"
-                  :key="j"
-                  v-model="formPoll.questions[i - 1].options[j]"
-                  type="text"
-                  outlined
-                  width="100%"
-                )
+                v-row(justify="center")
+                  v-col(cols="10" v-for="(r, p) in radios" :key="p")
+                    v-text-field(
+                      v-model="formPoll.questions[i - 1].options[j]"
+                      type="text"
+                      width="100%"
+                      outlined
+                    )
                 v-btn(color="secondary" @click.prevent="addOptionCheckbox" class="mr-2") +
                 v-btn(color="secondary" @click.prevent="removeOptionCheckbox" class="ml-2") -
               .group-options(v-if="selectType[i - 1]==='open'")
@@ -157,14 +161,23 @@
                     :key="i"
                     :label="formPoll.questions[i - 1].options[j]"
                   )
-        v-btn(color="" class="mt-4" block) Ver demo
-        v-btn(color="success" class="mt-4" block dark style="height:3rem") Publicar
+                .group-options(v-if="selectType[i - 1]==='open'" class="mb-4")
+                  v-textarea(solo)
+        v-btn(color="" class="mt-4" block @click="overlay=!overlay") Ver demo
+        v-btn(color="success" class="mt-4" block dark style="height:3rem" @click="overlay=!overlay") Publicar
+    v-overlay(:value="overlay")
+      p Esta funcionalidad todavía esta en construcción
+      v-btn(color="success" @click="overlay=!overlay") Entendido
 </template>
 
 <script>
 import { setTimeout } from 'timers'
 import { mapState, mapGetters } from 'vuex'
+import GuBreadcrumbs from '~/components/layout/Breadcrumbs'
+
 export default {
+  name: 'PollNew',
+  components: { GuBreadcrumbs },
   data() {
     return {
       question: 1,
@@ -174,15 +187,22 @@ export default {
       radios: 3, // Cantidad de opciones para preguntas radios
       label: '',
       label2: '',
+      overlay: false,
       formPoll: {
-        title: 'Título',
+        title: '',
         geocommunity: '',
         questions: [
           {
+            id: '',
             content: '',
             type: '', // Boolean, number, radio, checkbox,
-            options: [],
-            next: [] // Marca la siguiente pregunta en función de la respuesta actual
+            options: [
+              {
+                answer: '',
+                color: '',
+                next: '' // Marca la siguiente pregunta en función de la respuesta actual
+              }
+            ]
           }
         ]
       },
@@ -198,24 +218,29 @@ export default {
   },
   computed: {
     ...mapState(['error']),
-    ...mapGetters(['items'])
   },
   mounted() {
-    this.label = `Pregunta para ${this.items[this.items.length - 1].text}...`
   },
   methods: {
     addQuestion() {
       if (this.formPoll.questions[this.question - 1].content) {
-        this.formPoll.questions.push({
-          content: '',
-          type: '',
-          options: [],
-          next: []
-        })
-        const self = this
-        setTimeout(() => {
-          self.question++
-        }, 500)
+        if(this.formPoll.questions[this.question - 1].type) {
+          this.formPoll.questions.push({
+            content: '',
+            type: '',
+            options: [],
+            next: []
+          })
+          const self = this
+          setTimeout(() => {
+            self.question++
+          }, 500)
+        } else {
+          this.$store.commit(
+            'SET_ERROR',
+            'Seleccione el tipo de pregunta'
+          )  
+        }
       } else {
         this.$store.commit(
           'SET_ERROR',
@@ -273,7 +298,6 @@ export default {
       this.$store.commit('TOGGLE_MODAL_SELECT_COMMUNITY')
     },
     updateLabel() {
-      console.log('Estamos dentro del update')
       const self = this
       setTimeout(() => {
         self.label2 = `Ingrese un número entre ${

@@ -4,7 +4,7 @@
     h2.display-1.text-center.my-3 Naciones Unidas
     ul.gu-flex
       li(v-for="(flag, i) in flags" :key="i")
-        v-img(:src="flag" width="50")
+        img(:src="flag" width="50")
 </template>
 
 <script>

@@ -20,7 +20,7 @@
     v-layout(v-else="authId" justify-center align-center wrap)
       v-flex(xs11)    
         gu-breadcrumbs(class="my-5")
-      v-card(class="mx-5" style="max-width:300px" class="elevation-7")
+      v-card(class="mx-5 mt-5" style="max-width:300px" class="elevation-7")
         v-card-title
           h2.headline.text-center.mb-3(style="width:100%") Crea una encuesta
         v-card-text
@@ -32,7 +32,7 @@
             li Publique la encuesta y mire los resultados en tiempo real.
           v-card-actions
             v-btn(nuxt to="/poll/new" color="success" block) Crear
-      v-card(class="mx-5" style="max-width:300px" class="elevation-7")
+      v-card(class="mx-5 mt-5" style="max-width:300px" class="elevation-7")
         v-card-title
           h2.headline.text-center.mb-3(style="width:100%") Abre un nuevo debate
         v-card-text
@@ -43,7 +43,7 @@
             li Puede invitar a personas que opinen y marcar con cual esta de acuerdo.
         v-card-actions
           v-btn(color="success" block) Crear
-      v-card(class="mx-5" style="max-width:300px" class="elevation-7")
+      v-card(class="mx-5 mt-5" style="max-width:300px" class="elevation-7")
         v-card-title
           h2.headline.text-center.mb-3(style="width:100%") Acción colectiva
         v-card-text
