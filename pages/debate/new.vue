@@ -19,6 +19,9 @@
           v-model="switch1"
           :label="`${switch1?'Publica':'Privada'}`"
         )
+        p.caption Si es publica será para toda la comunidad. Si es privada solo para una subcomunidad que seleccione.
+      v-col(cols="12")
+        p Aca seleccionara el tipo
 </template>
 
 <script>
@@ -32,7 +35,11 @@ export default {
       formDebate: {
         title: '',
         public: true
-      }
+      },
+      titleRules: [
+        (v) => v.length <= 100 || 'Título de la encuesta debe tener menos de 100 caracteres',
+        (v) => v.length >= 5 || 'Título de la encuesta debe tener mas de 5 caracteres'
+      ]
     }
   }
 }

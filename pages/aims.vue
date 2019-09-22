@@ -1,14 +1,16 @@
 <template lang="pug">
-  main
-    v-container(fluid)
+  v-container
+    v-row(v-if="authId")
       gu-breadcrumbs
-    h1.subtitle Proyectos
-    v-container(v-for="(item, k) in items" :key="k")
-      h1.title En {{item.text}}
-      v-container(v-if="aims && aims.length !== 0")
-        v-layout
-          v-flex(v-for="(aim, i) in aims" :key="i")
-            gu-static-card( :aim="aim" )
+    v-row(justify="center")
+      h1.subtitle.text-center Aims
+    v-row(v-for="(item, k) in items" :key="k")
+      v-col(cols="12")
+        h1.title {{item.text}}
+      v-col(v-if="aims && aims.length !== 0")
+        v-row
+          v-col(v-for="(a, i) in aims" :key="i")
+            gu-static-card( :aim="a" )
       empty-page(v-else page="idea")
 </template>
 

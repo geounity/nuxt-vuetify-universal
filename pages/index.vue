@@ -1,24 +1,30 @@
 <template lang="pug">
-  main
-    v-layout(v-if="!authId" justify-center wrap)
-      v-flex(xs12 class="text-center")
-        world-map
-      v-flex(xs12 blue-grey darken-4)
-        h1(v-if="geocommunity.length<2" :class="fontSize").py-5.text-center.white--text Somos Comunidad Global Online
-      v-flex(xs12 wrap)
-        ul.list-continents.my-5
-          li(v-for="(item, i) in continents" :key="i" nuxt :to="item.path" active-class="highlighted" :class="item.name === continent.name ? 'highlighted' : ''") {{item.name}}
-      v-layout(v-if="geocommunity.length>2" justify-center row wrap)
-        v-flex(xs12 class="my-2 text-center")        
-          h1.display-1.font-weight-black {{geocommunity[2].name}}
-        v-flex(xs12 class="my-2 text-center")
-          img(:src="geocommunity[2].flag" width="200px" class="mr-1 my-1")
-        v-flex(xs12 class="my-2 text-center")
-          h2.body-2 Población aproximada: {{geocommunity[2].population}}
-          h3.overline.mt-2 Cantidad de {{geocommunity[2].division_name}}: {{geocommunity[2].cant_states}}
-          h3.caption (Incluye la capital)
-    v-layout(v-else="authId" justify-center align-center wrap)
-      v-flex(xs11)    
+  v-container
+    v-row(v-if="!authId" justify="center" wrap)
+      v-col(cols="12" blue-grey darken-4)
+        h1.display-1.py-3.text-center.font-weight-black Digital Mediation
+        p.text-center Geounity moderates debates between different points view. We identify agreements and conflicts.
+      v-col(cols="12")
+        h2.headline.py-3.text-center How it works
+      v-col(cols="12" md="4")
+        h3.title.pt-1.text-center Polls
+        v-row(justify="center")
+          v-img(src="polls.png" aspect-ratio="1" max-width="300")
+        p.text-center It will allow to know points view better.
+      v-col(cols="12" md="4")
+        h3.title.pt-1.text-center Debates
+        v-row(justify="center")
+          v-img(src="debates.png" aspect-ratio="1" max-width="300")
+        p.text-center Debate in a platform that rewards the best arguments.
+      v-col(cols="12" md="4")
+        h3.title.pt-1.text-center Aims
+        v-row(justify="center")
+          v-img(src="aims.png" aspect-ratio="1" max-width="300")
+        p.text-center It will allow to know points view better.
+
+    
+    v-row(v-else="authId" justify="center" align="center" wrap)
+      v-col(cols="11")    
         gu-breadcrumbs(class="my-5")
       v-card(class="mx-5 mt-5" style="max-width:300px" class="elevation-7")
         v-card-title
@@ -60,10 +66,9 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import GuBreadcrumbs from '~/components/layout/Breadcrumbs.vue'
-import WorldMap from '~/components/maps/World.vue'
 export default {
   name: 'Index',
-  components: { WorldMap, GuBreadcrumbs },
+  components: { GuBreadcrumbs },
   data() {
     return {
       continents: [
@@ -91,34 +96,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['geocommunity', 'authId']),
+    ...mapState(['authId']),
     ...mapGetters(['continent'])
-  },
-  mounted() {
-    this.fontSize()
-  },
-  methods: {
-    fontSize() {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return 'title'
-        case 'sm':
-          return 'headline'
-        case 'md':
-          return 'display-1'
-        case 'lg':
-          return 'display-2'
-        case 'xl':
-          return 'display-3'
-        default:
-          return 'display-1'
-      }
-    }
   }
 }
 </script>
 
-<style scoped>
+<style lang="stylus">
+
 .list-continents {
   display: flex;
   justify-content: space-around;

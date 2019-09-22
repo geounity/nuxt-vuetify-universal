@@ -162,7 +162,7 @@
                     :label="formPoll.questions[i - 1].options[j]"
                   )
                 .group-options(v-if="selectType[i - 1]==='open'" class="mb-4")
-                  v-textarea(solo)
+                  v-textarea(solo )
         v-btn(color="" class="mt-4" block @click="overlay=!overlay") Ver demo
         v-btn(color="success" class="mt-4" block dark style="height:3rem" @click="overlay=!overlay") Publicar
     v-overlay(:value="overlay")
@@ -208,7 +208,7 @@ export default {
       },
       titleRules: [
         (v) =>
-          v.length <= 256 ||
+          v.length <= 100 ||
           'Título de la encuesta debe tener menos de 100 caracteres',
         (v) =>
           v.length >= 5 ||

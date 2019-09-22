@@ -1,7 +1,7 @@
 <template lang="pug">
-  .map-container(class="text-align-center")
+  .map-container
+    h2.title.text-center.my-2 Select one community
     #vmap(:style="height")
-    h2.title.text-center.my-2 Seleccione una comunidad
 </template>
 
 <script>
@@ -28,9 +28,9 @@ export default {
         case 'xs':
           return 'height:290px'
         case 'sm':
-          return 'height:250px'
+          return 'height:340px'
         case 'md':
-          return 'height:300px'
+          return 'height:390px'
         case 'lg':
           return 'height:450px'
         case 'xl':
