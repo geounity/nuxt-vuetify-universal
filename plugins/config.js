@@ -1,5 +1,5 @@
 const configServices = {
-  apiUrl: 'http://localhost:4949',
+  apiUrl: 'http://localhost:8080',
   // apiUrl: 'http://35.247.212.2',
   firebase: {
     apiKey: 'AIzaSyA1frqipSZPFk61yfDQ9-uGSYXDuwxqdAg',

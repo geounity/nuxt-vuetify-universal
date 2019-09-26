@@ -5,11 +5,6 @@
       nuxt
     gu-footer
     gu-bottom-nav(class="hidden-md-and-up")
-    v-overlay(:value="overlay")
-      .box
-        v-btn(icon @click="toggleOverlayLogin" color="#000" style="position:absolute;right:0")
-          v-icon(style="font-size:2rem") mdi-close
-        gu-form-signin
 </template>
 
 <script>

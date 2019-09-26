@@ -7,15 +7,14 @@ import apiGeounity from '~/plugins/api'
 export const state = () => ({
   loading: false,
   error: false,
-  overlay: false,
   authId: '',
   user: null,
   progressUpload: 0,
-  geocommunity: [
+  geocommunities: [
     {
       name: 'Global',
-      level: 1,
       divisionName: 'Continents',
+      items: ['Africa', 'Asia', 'Americas', 'Europe', 'Oceania'],
       polls: [],
       statics: [],
       debates: [],
@@ -41,21 +40,24 @@ export const getters = {
     else return null
   },
   // geocmmunities
-  items: (state) => {
-    return state.geocommunity.map((item) => {
+  geocommunities: (state) => {
+    return state.geocommunities.map((item) => {
       const name = item.country || item.state || item.name
       return {
-        text: name
+        division: item.divisionName,
+        items: item.items,
+        name
       }
     })
   },
-  continent: (state) =>
-    state.geocommunity.length > 1 ? state.geocommunity[1] : '',
-  country: (state) => state.geocommunity[2],
-  state: (state) => state.geocommunity[3],
-  statics: (state) => state.geocommunity[state.geocommunity.length - 1].statics,
-  debates: (state) => state.geocommunity[state.geocommunity.length - 1].debates,
-  aims: (state) => state.geocommunity[state.geocommunity.length - 1].aims
+  continentName: (state) => state.geocommunities[1].name,
+  country: (state) => state.geocommunities[2],
+  state: (state) => state.geocommunities[3],
+  statics: (state) =>
+    state.geocommunities[state.geocommunities.length - 1].statics,
+  debates: (state) =>
+    state.geocommunities[state.geocommunities.length - 1].debates,
+  aims: (state) => state.geocommunities[state.geocommunities.length - 1].aims
 }
 
 export const mutations = {
@@ -82,7 +84,7 @@ export const mutations = {
   },
   // geocommnities
   DELETE_LAST_GEOCOMMUNITY: (state) => {
-    state.geocommunity.pop()
+    state.geocommunities.pop()
   },
   LOADING_OFF: (state) => {
     state.loading = false
@@ -96,16 +98,11 @@ export const mutations = {
   SET_MODAL_STATE: (state, { name, value }) => {
     state.modals[name] = value
   },
-  TOGGLE_OVERLAY_SIGNIN: (state) => {
-    state.overlay = !state.overlay
+  UPDATE_CONTINENT: (state, payload = {}) => {
+    state.geocommunities = [...state.geocommunities.slice(0, 1), payload]
   },
-  UPDATE_GEOCOMMUNITY: (state, payload = {}) => {
-    const l = state.geocommunity.length
-    let i = payload.level
-    for (i; i <= l; i++) {
-      state.geocommunity.pop()
-    }
-    state.geocommunity.push(payload)
+  UPDATE_COUNTRY: (state, payload = {}) => {
+    state.geocommunities = [...state.geocommunities.slice(0, 2), payload]
   }
 }
 
@@ -129,6 +126,43 @@ export const actions = {
   //     })
   //   }
   // },
+  // communities
+  UPDATE_CONTINENT: ({ state, commit }, continent) => {
+    apiGeounity
+      .get(`/api/geocommunities/${continent}/countries`)
+      .then((res) => {
+        const countries = res.data.data.map((item) => item.name)
+        const payload = {
+          name: continent,
+          divisionName: 'Countries',
+          items: countries,
+          polls: [],
+          statics: [],
+          debates: [],
+          aims: []
+        }
+        commit('UPDATE_CONTINENT', payload)
+      })
+      .catch((e) => console.error(e))
+  },
+  UPDATE_COUNTRY: ({ getters, commit }, country) => {
+    apiGeounity
+      .get(`/api/geocommunities/${getters.continent}/${country}`)
+      .then((res) => {
+        const states = res.data.data.map((item) => item.name)
+        const payload = {
+          name: country,
+          divisionName: 'Countries',
+          items: states,
+          polls: [],
+          statics: [],
+          debates: [],
+          aims: []
+        }
+        commit('UPDATE_COUNTRY', payload)
+      })
+      .catch((e) => console.error(e))
+  },
   // users
   CREATE_USER: ({ state, commit }, { email, username, password }) =>
     new Promise(async (resolve, reject) => {
@@ -143,8 +177,9 @@ export const actions = {
             const newUser = {
               email,
               username,
-              community: state.geocommunity[state.geocommunity.length - 1].name,
-              level: state.geocommunity.length
+              community:
+                state.geocommunities[state.geocommunities.length - 1].name,
+              level: state.geocommunities.length
             }
             db.collection('users')
               .add(newUser)

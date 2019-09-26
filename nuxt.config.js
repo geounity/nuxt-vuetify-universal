@@ -2,7 +2,7 @@
 
 module.exports = {
   server: {
-    port: 8080
+    port: 3000
   },
   mode: 'universal',
   router: {
@@ -55,7 +55,7 @@ module.exports = {
   /*
    ** Nuxt.js dev-modules
    */
-  devModules: [
+  buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/vuetify'
   ],

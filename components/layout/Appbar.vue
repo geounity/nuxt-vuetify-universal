@@ -2,11 +2,11 @@
   v-app-bar( dense app )
     v-toolbar-title
       nuxt-link( to="/" exact class="font-weight-black mr-2") {{title}}
-    v-toolbar-items.hidden-sm-and-down.ml-5
-      v-btn( nuxt :to="item.to" exact :key="i" v-for="(item, i) in items" x-large text color="rgb(62, 6, 148)" ) {{item.title}}
     v-spacer
+    v-toolbar-items.hidden-sm-and-down.mr-5
+      v-btn( nuxt :to="item.to" exact :key="i" v-for="(item, i) in items" text color="rgb(62, 6, 148)" ) {{item.title}}
     v-toolbar-items(style="display:flex;align-items:center")
-      v-btn( v-if="!isAuthenticated" @click.prevent="toggleOverlayLogin" x-large text class="font-weight-black" max-height="37" color="rgb(62, 6, 148)") Login
+      v-btn( v-if="!isAuthenticated" x-large text class="font-weight-black" max-height="37" color="rgb(62, 6, 148)") Login
       v-btn( v-if="!isAuthenticated" nuxt to="/signup" x-large class="font-weight-black my-btn-color" max-height="37" class="px-3") Registrate
       v-menu(v-if="isAuthenticated" transition="slide-y-transition" close-on-click offset-y)
         template(v-slot:activator="{on}")
@@ -50,9 +50,6 @@ export default {
   methods: {
     signOut() {
       this.$store.dispatch('SIGN_OUT')
-    },
-    toggleOverlayLogin() {
-      this.$store.commit('TOGGLE_OVERLAY_SIGNIN')
     }
   }
 }

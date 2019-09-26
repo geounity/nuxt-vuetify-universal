@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import GuBreadcrumbs from '~/components/layout/Breadcrumbs.vue'
 import GuCardAim from '~/components/cards/AimCard.vue'
 import EmptyPage from '~/components/empty/EmptyPage.vue'
@@ -26,6 +26,7 @@ export default {
     return {}
   },
   computed: {
+    ...mapState(['authId']),
     ...mapGetters(['items', 'aims'])
   }
 }

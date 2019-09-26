@@ -1,9 +1,10 @@
 <template lang="pug">
   v-container
     v-row(v-if="!authId" justify="center" wrap)
-      v-col(cols="12" blue-grey darken-4)
+      v-col(cols="12" md="6" blue-grey darken-4)
         h1.display-1.py-3.text-center.font-weight-black Digital Mediation
         p.text-center Geounity moderates debates between different points view. We identify agreements and conflicts.
+    v-row(v-if="!authId" justify="center" wrap)
       v-col(cols="12")
         h2.headline.py-3.text-center How it works
       v-col(cols="12" md="4")
