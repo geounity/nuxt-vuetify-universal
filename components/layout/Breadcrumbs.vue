@@ -1,11 +1,9 @@
 <template lang="pug">
-  v-row(align="center")
-    span Global &gt;
-    //- div(class="d-flex")
-    //-   v-select(:items="geocommunities[0].items" :label="geocommunities[0].division" @focus="hola" @change="updateContinent" class="select-breadcrumbs ml-3" single-line dense)
-    //-   v-select(v-if="geocommunities.length>1" :items="geocommunities[1].items" :label="geocommunities[1].division" @change="updateCountry" class="select-breadcrumbs ml-3" single-line dense)
-    div(v-for="(geocommunity, i) in geocommunities" :key="i" class="d-flex")
-      v-select(:items="geocommunity.items" :label="geocommunity.division" @focus="handleFocus(geocommunity.division)" @change="updateCommunity" class="select-breadcrumbs ml-3" single-line dense)
+  v-row(align="center" justify="start")
+    v-col(cols="12" md="1")
+      span Global
+    v-col(cols="12" md="3" v-for="(geocommunity, i) in geocommunities" :key="i")
+      v-select(:items="geocommunity.items" :label="geocommunity.division" @focus="handleFocus(geocommunity.division)" @change="updateCommunity" class="select-breadcrumbs" single-line dense)
 </template>
 
 <script>
@@ -35,7 +33,8 @@ export default {
           this.$store.dispatch('UPDATE_CONTINENT', geocommunity)
           break;
         case 'Countries':
-          console.log('hacer otra cosa')
+          this.$store.dispatch('UPDATE_COUNTRY', geocommunity)
+          break;
       }
       console.log('Communities', this.geocommunities.length)
     }
@@ -44,7 +43,7 @@ export default {
 </script>
 
 <style scoped>
-.select-breadcrumbs {
-  max-width: 120px;
-}
+/* .select-breadcrumbs {
+  max-width: 150px;
+} */
 </style>

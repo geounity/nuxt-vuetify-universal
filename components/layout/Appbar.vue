@@ -34,11 +34,11 @@ export default {
       to: '/login',
       title: 'Geounity',
       items: [
-        { title: 'Estadisticas', to: '/statics' },
+        { title: 'Statics', to: '/statics' },
         { title: 'Debates', to: '/debates' },
-        { title: 'Planificación', to: '/aims' },
+        { title: 'Aims', to: '/aims' },
         {
-          title: 'Comunidades',
+          title: 'Communities',
           to: '/communities'
         }
       ]

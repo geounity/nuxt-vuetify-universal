@@ -1,10 +1,9 @@
 <template lang="pug">
   v-container
-    v-row(v-if="authId")
-      gu-breadcrumbs
+    gu-breadcrumbs
     v-row(justify="center")
       h1.subtitle.text-center Aims
-    v-row(v-for="(item, k) in items" :key="k")
+    v-row(v-for="(item, k) in geocommunities" :key="k")
       v-col(cols="12")
         h1.title {{item.text}}
       v-col(v-if="aims && aims.length !== 0")
@@ -16,9 +15,10 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+
+import EmptyPage from '~/components/empty/EmptyPage.vue'
 import GuBreadcrumbs from '~/components/layout/Breadcrumbs.vue'
 import GuCardAim from '~/components/cards/AimCard.vue'
-import EmptyPage from '~/components/empty/EmptyPage.vue'
 export default {
   name: 'PageAims',
   components: { GuCardAim, EmptyPage, GuBreadcrumbs },
@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     ...mapState(['authId']),
-    ...mapGetters(['items', 'aims'])
+    ...mapGetters(['geocommunities', 'aims'])
   }
 }
 </script>

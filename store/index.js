@@ -127,11 +127,11 @@ export const actions = {
   //   }
   // },
   // communities
-  UPDATE_CONTINENT: ({ state, commit }, continent) => {
+  UPDATE_CONTINENT: ({ commit }, continent) => {
     apiGeounity
-      .get(`/api/geocommunities/${continent}/countries`)
+      .get(`/${continent}/countries`)
       .then((res) => {
-        const countries = res.data.data.map((item) => item.name)
+        const countries = res.data.map((item) => item.country)
         const payload = {
           name: continent,
           divisionName: 'Countries',
@@ -145,14 +145,15 @@ export const actions = {
       })
       .catch((e) => console.error(e))
   },
-  UPDATE_COUNTRY: ({ getters, commit }, country) => {
+  UPDATE_COUNTRY: ({ commit }, country) => {
     apiGeounity
-      .get(`/api/geocommunities/${getters.continent}/${country}`)
+      .get(`/${country}/states`)
       .then((res) => {
-        const states = res.data.data.map((item) => item.name)
+        console.log('Res: ', res)
+        const states = res.data.map((item) => item.state)
         const payload = {
           name: country,
-          divisionName: 'Countries',
+          divisionName: 'States',
           items: states,
           polls: [],
           statics: [],

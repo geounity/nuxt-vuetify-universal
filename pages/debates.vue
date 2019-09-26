@@ -28,7 +28,7 @@
 
   export default {
     name: 'PageDebates',
-    components: { GuDebateCard, EmptyPage, GuBreadcrumbs },
+    components: { GuDebateCard, GuBreadcrumbs, EmptyPage },
     async asyncData () {
       try {
         let res = await apiGeounity.get('/api/debates')

@@ -1,9 +1,9 @@
 // const webpack = require('webpack')
 
 module.exports = {
-  // server: {
-  //   port: 3000
-  // },
+  server: {
+    port: 3000
+  },
   mode: 'universal',
   router: {
     middleware: ['authenticated']
