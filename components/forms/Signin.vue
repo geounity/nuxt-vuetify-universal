@@ -1,37 +1,31 @@
-<template lang="pug">
-  v-row(justify="center" wrap class="mt-5")
-    v-col(cols="10" align-self-center)
-      v-form(v-model="value" ref="form" lazy-validation class="my-1")
-        h2(heading class="text-center mb-5") Iniciar sesión
-        v-text-field(
-          v-model="formLogin.email"  
-          :rules="emailRules"
-          label="Correo electronico"
-          type="email"
-          name="email"
-          solo
-          required
-        )
-        v-text-field(
-          v-model="formLogin.password"
-          :rules="passRules"
-          label="Contraseña"
-          placeholder="********"
-          name="password"
-          type="password"
-          solo
-          required
-        )
-        v-btn(:disabled="!value" color="success" block @click="loginHandlerSubmit" @keyup.enter="loginHandlerSubmit") Iniciar sesión
-    v-col(cols="12")
-      no-ssr
-        firebase-ui
+<template lang="pug">  
+  v-form(v-model="value" ref="form" lazy-validation class="my-1")
+    h2(heading class="text-center mb-5") Iniciar sesión
+    v-text-field(
+      v-model="formLogin.email"  
+      :rules="emailRules"
+      label="Correo electronico"
+      type="email"
+      name="email"
+      solo
+      required
+    )
+    v-text-field(
+      v-model="formLogin.password"
+      :rules="passRules"
+      label="Contraseña"
+      placeholder="********"
+      name="password"
+      type="password"
+      solo
+      required
+    )
+    v-btn(:disabled="!value" color="success" block @click="loginHandlerSubmit" @keyup.enter="loginHandlerSubmit") Iniciar sesión
 </template>
 
 <script>
-import FirebaseUi from '~/components/firebaseui'
 export default {
-  components: { FirebaseUi },
+  name: 'formSignIn',
   data() {
     return {
       value: true,

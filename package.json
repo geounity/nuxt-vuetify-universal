@@ -29,6 +29,7 @@
     "jscookie": "^1.1.0",
     "jwt-decode": "^2.2.0",
     "nuxt": "^2.9.2",
+    "session": "^0.1.0",
     "trae": "^1.4.2"
   },
   "devDependencies": {

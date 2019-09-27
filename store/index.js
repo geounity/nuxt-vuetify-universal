@@ -300,21 +300,17 @@ export const actions = {
     commit('SET_POLL', { newPoll, pollId })
     commit('APPEND_POLL_TO_USER', { pollId, userId: newPoll.userId })
   },
-  FETCH_COUNTRY: ({ commit }, code) => {
+
+  FETCH_COUNTRY: ({ dispatch }, code) => {
     return apiGeounity.get(`/country/${code}`).then((country) => {
       const { data } = country
-      commit('UPDATE_GEOCOMMUNITY', {
-        name: data.in_continent,
-        level: 2,
-        divisionName: 'Countries'
-      }) // Add continent
-      commit('UPDATE_GEOCOMMUNITY', {
-        ...data,
-        name: data.country,
-        level: 3
-      }) // Add country
+      console.log('Quiero ver que hay: ', data)
+      console.log('Este pais esta dentro del continente: ', data.in_continent)
+      dispatch('UPDATE_CONTINENT', data.in_continent)
+      dispatch('UPDATE_COUNTRY', data.country)
     })
   },
+
   FETCH_STATES: ({ commit }, countryCode) => {
     return apiGeounity.get(`/${countryCode}/states`)
   },
